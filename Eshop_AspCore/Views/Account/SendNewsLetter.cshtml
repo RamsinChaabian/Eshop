@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "ارسال خبرنامه برای کاربران";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-send"></i>
+        <h3 class="box-title">ارسال خبرنامه</h3>
+    </div>
+    <div class="box-body">
+
+        @if (TempData["Msg"] != null)
+        {
+            <div class="@TempData["Style"] text-center">@TempData["Msg"]</div>
+        }
+        <br />
+        <form asp-action="SendNewsLetter" asp-controller="Account" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>متن خبرنامه :</label>
+                        <textarea placeholder="متن خبرنامه را وارد نمایید" name="message" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <input type="submit"name="btnSend" class="btn btn-success" value="ارسال خبرنامه" />
+        </form>
+    </div>
+</div>

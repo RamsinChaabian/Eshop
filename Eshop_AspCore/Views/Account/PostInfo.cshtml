@@ -1,0 +1,305 @@
+﻿@model VmUser
+@{
+    ViewData["Title"] = "اطلاعات پستی کاربر";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewBag.Email = Model.Email;
+    ViewBag.UserId = Model.UserId;
+    ViewBag.FullName = Model.FirstName + " " + Model.LastName;
+}
+
+<link href="~/AdminLayout/Content/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/AdminLayout/Scripts/jquery-confirm.min.js"></script>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ویرایش اطلاعات پستی کاربر</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <form asp-action="RegisterUserPostInfo" asp-controller="Account" method="post">
+                <div class="modal-body">
+
+                    <input type="hidden" name="UserId" value="@ViewBag.Userid" />
+
+                    <div class="form-horizontal">
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Title">استان : </label>
+                            <div class="col-md-6">
+                                <input class="form-control" id="txtProvince" asp-for="Province" name="Province" placeholder="استان را وارد نمایید" />
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Title">شهر : </label>
+                            <div class="col-md-6">
+                                <input class="form-control" id="txtCity" asp-for="City" name="City" placeholder="شهر را وارد نمایید" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Title">کد پستی :  </label>
+                            <div class="col-md-6">
+                                <input class="form-control" id="txtPostalCode" maxlength="10" asp-for="PostalCode" name="PostalCode" placeholder="کد پستی را وارد نمایید" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Title">آدرس : </label>
+                            <div class="col-md-6">
+                                <textarea class="form-control" asp-for="Address" id="txtAddress" name="Address" placeholder="آدرس خود را وارد نمایید "></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="submit" onclick="return validateForm()" class="btn btn-labeled bg-green-active"> <i class="fa fa-save"></i> ذخیره</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!--End Modal-->
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-home"></i>
+        <h3 class="box-title">اطلاعات پستی کاربر</h3>
+    </div>
+    <div class="box-body">
+
+        @{if (TempData["Msg"] != null)
+            {
+
+                <div class="@TempData["Style"]">@TempData["Msg"]</div>
+            }
+        }
+
+        @if (string.IsNullOrEmpty(Model.Address) || string.IsNullOrEmpty(Model.City) || string.IsNullOrEmpty(Model.PostalCode))
+        {
+
+            <div class="alert alert-danger text-center">اطلاعات پستی شما تکمیل نمی باشد لطفا اطلاعات زیر را تکمیل نمایید</div>
+
+            if (TempData["Message"] != null)
+            {
+                <div class="@TempData["Style"]">@TempData["Message"]</div>
+            }
+
+            <form asp-action="RegisterUserPostInfo" asp-controller="Account" method="post">
+                <input type="hidden" asp-for="UserId" name="UserId" value="@ViewBag.Userid" />
+
+                <span class="center-block text-center">اطلاعات پستی : @ViewBag.FullName &nbsp; - &nbsp; @ViewBag.Email </span>
+                <hr />
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Title">استان : </label>
+                        <div class="col-md-6">
+                            <input class="form-control" id="Province" asp-for="Province" name="Province" placeholder="استان را وارد نمایید" />
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Title">شهر : </label>
+                        <div class="col-md-6">
+                            <input class="form-control" id="City" asp-for="City" name="City" placeholder="شهر را وارد نمایید" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Title">کد پستی :  </label>
+                        <div class="col-md-6">
+                            <input class="form-control" id="PostalCode" maxlength="10" asp-for="PostalCode" name="PostalCode" placeholder="کد پستی را وارد نمایید" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Title">آدرس : </label>
+                        <div class="col-md-6">
+                            <textarea class="form-control" asp-for="Address" id="Address" name="Address" placeholder="آدرس خود را وارد نمایید "></textarea>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="box-footer clearfix">
+                    <div class="col-md-10 col-md-offset-2">
+                        <button type="submit" onclick="return validateForm()" class="btn btn-labeled bg-green-active"> <i class="fa fa-save"></i> ذخیره</button>
+                    </div>
+                </div>
+            </form>
+        }
+        else
+        {
+
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <div class="form-group">
+
+                        <span>نام و نام خانوادگی : @ViewBag.FullName</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+
+                        <span>استان: @Model.Province</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+
+                        <span>شهر : @Model.City</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+
+                        <span>کد پستی : @Model.PostalCode</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+
+                        <span>آدرس : @Model.Address</span>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group alert alert-success">
+                        &nbsp;
+
+                        <span class="">آدرس کامل پستی : استان  @Model.Province &nbsp;- &nbsp;شهر  @Model.City &nbsp;- &nbsp; @Model.Address&nbsp;-&nbsp;منزل @ViewBag.FullName &nbsp;-&nbsp;کد پستی :  @Model.PostalCode</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-danger center-block" data-toggle="modal" data-target="#exampleModal">
+                ویرایش اطلاعات پستی
+            </button>
+
+        }
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    function validateForm() {
+
+        var Province = $('#Province').val();
+        var Address = $('#Address').val();
+        var City = $('#City').val();
+        var PostalCode = $('#PostalCode').val();
+
+        if (Province == "") {
+            $('#Province').focus();
+            $.alert({
+                title: 'خطا',
+                content: 'لطفا استان را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+
+        if (City == "") {
+
+            $('#City').focus();
+
+            $.alert({
+                title: 'خطا',
+                content: 'لطفا شهر را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+
+        if (PostalCode == "") {
+
+            $('#PostalCode').focus();
+
+            $.alert({
+                title: 'خطا',
+                content: 'لطفا کد پستی را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+        if (Address == "") {
+            $('#Address').focus();
+            $.alert({
+                title: 'خطا',
+                content: 'لطفاادرس  را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+
+        return true;
+    }
+
+</script>
+
+
+
+
+
+
+
+
+

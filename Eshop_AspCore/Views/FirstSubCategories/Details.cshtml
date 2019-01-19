@@ -1,0 +1,37 @@
+﻿@model Eshop_AspCore.Data.Models.FirstSubCategory
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>FirstSubCategory</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CatId_FK)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CatId_FK)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstSubCatTitle)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstSubCatTitle)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Picture)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Picture)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.FirstSubCatId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

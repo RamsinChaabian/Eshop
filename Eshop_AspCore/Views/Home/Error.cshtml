@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "خطا";
+    Layout = "~/Views/Shared/_Main_Layout.cshtml";
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-danger text-center">@TempData["ErrorMsg"]</div>
+}
+
+@if (TempData["ErrorAccess"] != null)
+{
+    <div class="alert alert-danger text-center" style="font-family:IRANSans">@TempData["ErrorAccess"]</div>
+}

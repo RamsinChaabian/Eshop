@@ -1,0 +1,132 @@
+﻿@model IEnumerable<VmProductsByCategory>
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Main_Layout.cshtml";
+}
+
+<style>
+    .productinfo h4 {
+        color: #FE980F;
+        font-family: IRANSans;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .iranSansFont {
+        font-family: 'Iranian Sans';
+    }
+</style>
+
+<section>
+
+
+    <!-- Start Category -->
+    <div class="sidebar">
+        <h2 class="subject">جست و  جو بر اساس قیمت</h2>
+        @if (Model != null && Model.Count() > 0)
+        {
+            <div class="category-products">
+                <!--category-products-->
+                @{
+                    int CatId = Model.FirstOrDefault().FirstSubCat_FK;
+                    string title = Model.FirstOrDefault().TitleFirstCat;
+                    string link = CatId + "-" + title;
+                }
+                <form asp-action="Search" asp-controller="Home" method="get">
+                    <input type="text" name="minPrice" value="@ViewBag.min_Price" placeholder="از قیمت" class="form-control iranSansFont" />
+                    <p></p>
+                    <input type="text" name="maxPrice" value="@ViewBag.max_Price" placeholder="تا قیمت" class="form-control iranSansFont" />
+                    <p></p>
+                    <input type="text" name="txtSearch" value="@ViewBag.SearchNamePro" onsubmit="submitForm()" placeholder="نام محصول" class="form-control iranSansFont" />
+                    <br />
+                    <input type="hidden" name="FirstCatId" value="@link" />
+                    <input type="submit" name="btnSearch" value="جست و جو" class="btn btn-primary" />
+                </form>
+            </div><!--/category-products-->
+        }
+        else
+        {
+            <input type="text" name="minPrice" value="0" placeholder="از قیمت" class="form-control iranSansFont" />
+            <p></p>
+            <input type="text" name="maxPrice" value="0" placeholder="تا قیمت" class="form-control iranSansFont" />
+            <p></p>
+            <input type="text" name="txtSearch" value="@ViewBag.SearchNamePro" onsubmit="submitForm()" placeholder="نام محصول" class="form-control iranSansFont" />
+            <br />
+            <input type="hidden" name="FirstCatId" value="" />
+        }
+
+
+    </div>
+    <!--End Category-->
+
+    <div class="content">
+        @if (Model != null && Model.Count() > 0)
+        {
+            <h2 class="subject">گروه محصولات @Model.FirstOrDefault().TitleFirstCat <label class="pull-left">  تعداد نتایج : @Model.Count() محصول</label> </h2>
+
+            <div class="features_items">
+                <!--features_items-->
+
+                @foreach (var item in Model)
+                {
+                    <div class="product-image-wrapper">
+                        <div class="single-products">
+                            <div class="productinfo">
+                                <img src="@item.DefaultPic" class="img-rounded" style="padding-top:10px" alt="@item.ProductNameEN" />
+
+                                @if (item.OffProduct > 0 && item.OffProduct <= 100)
+                                {
+
+                                    decimal p1 = Math.Ceiling(item.Price * item.OffProduct / 100);
+                                    decimal p2 = item.Price - p1;
+                                    decimal FinalPrice = (Math.Ceiling(p2 / 100) * 100);
+                                    <strike><h4>@item.Price تومان </h4></strike>
+                                    <h2>@FinalPrice تومان </h2>
+                                    <label class="badge alert-danger iranSansFont">@item.OffProduct % تخفیف</label>
+
+                                }
+                                else
+                                {
+                                    <h4>&nbsp;</h4>
+                                    <h2>@item.Price تومان </h2>
+
+                                }
+                                <label>&nbsp;</label>
+                                <p>@item.ProductNameFA</p>
+                                <a href="#" class="btn add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبد</a>
+                                <a href="/Home/DetailsProduct?productId=@item.ProductId" class="btn add-to-cart"><i class="glyphicon glyphicon-info-sign"></i>توضیحات</a>
+
+                            </div>
+                            <div class="panel-footer" style="font-family:'Iranian Sans'"> تعداد بازدید : @item.SeeProduct نفر</div>
+                        </div>
+
+                    </div>
+
+
+                }
+
+
+
+                <div class="clear"></div>
+            </div>
+        }
+        else
+        {
+            <br />
+            <div class="alert alert-danger text-center iranSansFont">محصولی یافت نشد</div>
+            <a href="@ViewBag.BackUrl" role="button" class="btn btn-info center-block ">بازگشت</a>
+        }
+
+    </div>
+    <div class="clear"></div>
+
+</section>
+
+<script>
+    function submitForm() {
+        document.getElementById("btnSearch").submitForm();
+
+    }
+</script>
+
+

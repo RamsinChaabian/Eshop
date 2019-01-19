@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Eshop_AspCore.Data.Models.UserAccess>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                نام و نام خانوادگی
+            </th>
+            <th>
+                سطح دسترسی
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddPost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeletePost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EditPost)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tbl_User.FirstName)
+                    @Html.DisplayFor(modelItem => item.Tbl_User.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tbl_Role.RoleTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddPost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeletePost)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EditPost)
+                </td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

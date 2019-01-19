@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Eshop_AspCore.Data.Models.Files>
+
+@{
+    ViewData["Title"] = "عکس های اسلایدر";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-object-group"></i>
+        <h3 class="box-title">عکس های اسلایدر</h3>
+    </div>
+    <div class="box-body">
+        @{
+            int rowCount = 1;
+            @foreach (var item in Model)
+            {
+                <div class="col-sm-6 col-md-2">
+                    <label class="label label-danger pull-right" style="font-size:15px">@rowCount</label>
+                    <div class="thumbnail">
+                        <img src="~/Files/Images/Slider/@item.FileName" style="width:100px;height:100px" class="img-rounded" />
+
+                        <div>
+                            <hr />
+                            <p><a asp-action="Delete" class="btn btn-danger btn-xs" asp-route-id="@item.FileId">Delete</a></p>
+                        </div>
+                    </div>
+
+                </div>
+                rowCount = rowCount + 1;
+
+            }
+        }
+    </div>
+</div>

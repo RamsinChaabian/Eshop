@@ -1,0 +1,212 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Main_Layout.cshtml";
+}
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+
+<style>
+    .iranSansFont {
+        font-family: 'IranSans';
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-show-password/1.0.3/bootstrap-show-password.min.js"></script>
+
+<h2>&nbsp;</h2>
+
+<div class="container">
+    <div class="panel panel-primary ">
+        <div class="panel-heading">
+            <div class="panel-title iranSansFont">ورود به پنل کاربری</div>
+        </div>
+        <div class="panel-body iranSansFont">
+            <div class="row">
+                @if (TempData["Message"] != null)
+                {
+                    <div class="@TempData["Style"]">@TempData["Message"]</div>
+                }
+                <div class="col-md-4 pull-right">
+                    <form asp-action="Register" asp-controller="Account" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" onsubmit="return validateForm()">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" id="InputEmail" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password" class="control-label"></label>
+                            <input asp-for="Password" id="InputPassword" class="form-control" data-toggle="password" onkeyup="chkpwd()" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ConfirmPassword" class="control-label"></label>
+                            <input asp-for="ConfirmPassword" id="InputConfirmPassword" class="form-control" onkeyup="chkConfirmPwd()" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" disabled id="btnRegister" value="ثبت نام" class="btn btn-success" />
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-8 pull-left">
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <span id="msgError" hidden class="alert alert-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#InputPassword").password('toggle');
+</script>
+
+<script>
+    function validateForm() {
+
+        var Email = $('#InputEmail').val();
+        var Password = $('#InputPassword').val();
+        var ConfirmPassword = $('#InputConfirmPassword').val();
+        if (Email == "") {
+            //$('#msgForm').append('<div class="alert alert-danger text-center">لطفا نام و نام خانوادگی وارد نمایید</div>').fadeOut(8000);
+            $('#InputEmail').focus();
+            $.alert({
+                title: 'خطا',
+                content: 'لطفاایمیل را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+        if (Password == "") {
+            $('#InputPassword').focus();
+
+            $.alert({
+                title: 'خطا',
+                content: 'لطفا کلمه عبور را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+
+        if (Password.length < 6) {
+            $('#InputPassword').focus();
+
+            $.alert({
+                title: 'خطا',
+                content: 'کلمه عبور باید بیش از 6 حرف باشد',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+
+        if (ConfirmPassword != Password) {
+            $('#InputConfirmPassword').focus();
+
+            $.alert({
+                title: 'خطا',
+                content: 'کلمه عبور یکسان نیست',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+        return true;
+    }
+    //------------------------------//
+</script>
+
+<script type="text/javascript">
+    chkpwd = function (validate) {
+        var str = document.getElementById('InputPassword').value;
+        $('#msgError').attr('hidden', false);
+        if (str.length < 6) {
+            document.getElementById('msgError').innerHTML = "کلمه عبور باید حداقل 6 کاراکتر باشد ";
+            $('#btnRegister').attr('disabled', true);
+            return ("too_short");
+        }
+        else if (str.search(/[0-9]/) == -1) {
+            document.getElementById('msgError').innerHTML = "کلمه عبور باید شامل عدد باشد ";
+            $('#btnRegister').attr('disabled', true);
+            return ("no_number");
+        }
+        else if (str.search(/[a-z]/) == -1) {
+            document.getElementById('msgError').innerHTML = "کلمه عبور باید حداقل یک حرف لاتین کوچک باشد برای مثال : a";
+            $('#btnRegister').attr('disabled', true);
+            return ("no_lowercase");
+        }
+        else if (str.search(/[A-Z]/) == -1) {
+            document.getElementById('msgError').innerHTML = "کلمه عبور باید حداقل یک حرف لاتین بزرگ باشد برای مثال : A";
+            $('#btnRegister').attr('disabled', true);
+            return ("no_uppercase");
+        }
+        else if (str.search(/[~\!\#\$\%\^\&\*\(\)\:\.\,\;]/) == -1) {
+            document.getElementById('msgError').innerHTML = "کلمه عبور باید حداقل یک کاراکتر علامت دار داشته باشد برای مثال : %^#";
+            $('#btnRegister').attr('disabled', true);
+            return ("no_character");
+        }
+        $('#msgError').attr('hidden', true);
+        $('#btnRegister').attr('disabled', false);
+        return ("Ok");
+    }
+
+    chkConfirmPwd = function () {
+        var Password = $('#InputPassword').val();
+        var ConfirmPassword = $('#InputConfirmPassword').val();
+
+        if (Password != ConfirmPassword) {
+            document.getElementById('InputConfirmPassword').style.borderColor = "red";
+            $('#btnRegister').attr('disabled', true);
+        }
+        else {
+            document.getElementById('InputConfirmPassword').style.borderColor = "green";
+            $('#btnRegister').attr('disabled', false);
+        }
+    }
+</script>

@@ -1,0 +1,155 @@
+﻿@model IEnumerable<VmPay>
+@{
+    ViewData["Title"] = "سفارشات کاربران";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    UserRepository rep_User = new UserRepository();
+}
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-user"></i>
+        <h3 class="box-title">سفارشات کاربران</h3>
+    </div>
+    <div class="box-body">
+        <form asp-action="Index" asp-controller="Invoices">
+            <select name="statusPay" class="col-md-2">
+                <option value="">همه پرداختی ها</option>
+                <option style="color:green" value="True">پرداخت شده</option>
+                <option style="color:red" value="False">پرداخت نشده</option>
+            </select>
+            &nbsp;&nbsp;
+            <input type="submit" name="btnFilter" value="فیلتر" class="btn btn-success" />
+        </form>
+
+        @if (Model != null)
+        {
+            <table class="table-responsive table-bordered table-condensed table-hover table-striped" style="width:100%">
+                <thead>
+                    <tr class="text-center">
+                        <th>ردیف</th>
+                        <th>نام و نام خانوادگی </th>
+                        <th>ایمیل</th>
+                        <th>شماره فاکتور</th>
+                        <th>تاریخ / زمان خرید</th>
+                        <th>وضعیت پرداخت</th>
+                        <th>مبلغ پرداخت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int rowCount = 1;
+                        foreach (var item in Model)
+                        {
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal_@item.InvoiceId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">شماره تراکنش</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+
+                                            <label> شماره تراکنش : </label>
+
+                                            <input type="text" disabled name="Authority" value=" @item.Authority" />
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <tr class="text-center">
+                                <td>@rowCount</td>
+                                <td>@(rep_User.GetUserById(item.UserId_FK).FirstName + " " + rep_User.GetUserById(item.UserId_FK).LastName)</td>
+                                <td>@(rep_User.GetUserById(item.UserId_FK).Email)</td>
+                                <td>@item.InvoiceId</td>
+                                <td>@ShamsiPlugin.ToPeString(item.DateOrder, "dddd yyyy/MM/dd hh:mm")</td>
+
+                                @if (item.StatusPay == false)
+                                {
+
+                                    <td><label class="label label-danger">پرداخت نشده</label></td>
+                                }
+                                else
+
+                                {
+                                    <td><label class="label label-success">پرداخت شده</label></td>
+
+                                }
+
+                                @if (item.StatusPay == false)
+                                {
+
+                                    <td>0 &nbsp; تومان</td>
+                                }
+                                else
+                                {
+                                    <td>@item.SumPrice.ToString("#,###") &nbsp; تومان</td>
+
+                                }
+
+                                @if (item.StatusPay == false)
+                                {
+
+                                    <td>
+                                        <a class="btn btn-danger btn-xs" asp-action="ShowDetailsOrders" asp-controller="Invoices" asp-route-invoiceId="@item.InvoiceId">مشاهده جزئیات</a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <button type="button" class="btn btn-warning btn-xs center-block" data-toggle="modal" data-target="#exampleModal_@item.InvoiceId">
+                                            شماره تراکنش
+                                        </button>
+                                        <a asp-action="ShowDetailsOrders" asp-controller="Invoices" asp-route-invoiceId="@item.InvoiceId" class="btn btn-primary btn-xs">مشاهده جزئیات</a>
+                                    </td>
+                                }
+
+
+                                @*<td><a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#exampleModal">مشاهده متن نظر</a></td>*@
+                            </tr>
+                            rowCount = rowCount + 1;
+                        }
+                    }
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-danger text-center">تا کنون شما سفارشی نداشتین</div>
+        }
+    </div>
+</div>
+
+<script>
+    function ShowAlert() {
+        $.alert({
+            title: 'خطا',
+            content: 'فاکتور صادر نشده است جهت صدور فاکتور سفارش خود را نهایی کنید',
+            rtl: true,
+            closeIcon: true,
+            type: 'red',
+            typeAnimated: true,
+            theme: 'material',
+            buttons: {
+                confirm: {
+                    text: 'تایید',
+                    btnClass: 'btn-red',
+                }
+            },
+        });
+
+    }
+</script>
+

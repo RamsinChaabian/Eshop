@@ -1,0 +1,60 @@
+﻿@using Microsoft.Extensions.FileProviders
+@model IDirectoryContents
+@{
+    ViewData["Title"] = "رسانه ها";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@*<ul>
+        @foreach (IFileInfo item in Model)
+        {
+            if (item.Exists)
+            {
+                <li><strong>@item.Name</strong></li>
+            }
+            else
+            {
+                <li>@item.Name - @item.Length bytes</li>
+            }
+        }
+    </ul>*@
+
+@{
+
+    int rowCount = 1;
+    @foreach (IFileInfo item in Model)
+    {
+<div class="col-sm-6 col-md-4">
+
+    @if (item.Name.Contains("."))
+    {
+        <label class="label label-danger " style="font-size:13px">@(rowCount++)</label>
+
+        <div class="thumbnail">
+            <img src="~/Files/Images/@item.Name" style="width:100px;height:100px" class="img-rounded" />
+            <div>
+                <hr />
+
+                <p>@(item.Length / 1024) کیلوبایت</p>
+                @{
+                    DateTimeOffset offsetDate;
+                    DateTime regularDate;
+
+                    offsetDate = item.LastModified;
+                    regularDate = offsetDate.DateTime;
+                }
+                <p>@ShamsiPlugin.ToPeString(regularDate, "dddd yyyy/MM/dd hh:mm")</p>
+                <p><a asp-action="Delete" class="btn btn-danger btn-xs">حذف</a></p>
+            </div>
+        </div>
+
+    }
+
+</div>
+    }
+
+}
+
+
+
+

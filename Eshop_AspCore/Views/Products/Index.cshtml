@@ -1,0 +1,106 @@
+﻿@model IEnumerable<Eshop_AspCore.Data.Models.Products>
+
+@{
+    ViewData["Title"] = "مدیریت محصولات";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="box box-info full-width-div">
+    <div class="box-header">
+        <i class="fa fa-group"></i>
+        <h3 class="box-title">مدیریت محصولات</h3>
+    </div>
+    <div class="box-body row">
+        @if (ViewBag.Msg != null)
+        {
+            <div class="@ViewBag.Style text-center">@ViewBag.Msg</div>
+        }
+        <p>
+            <a class="btn btn-success" asp-action="Create"><i class="fa fa-save"></i>&nbsp; تعریف محصول جدید</a>
+        </p>
+        <table class="table  table-condensed  table-hover table-responsive table-striped text-center">
+            <thead>
+                <tr>
+                    <th>
+                        نام محصول
+                    </th>
+                    <th>
+                        تصویر محصول
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsShowProduct)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OffProduct)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CountProduct)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateProduct)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Weight)
+                    </th>
+                    <th>
+                        دسته بندی محصول
+                    </th>
+                    <th>
+                        کاربر ثبت کننده
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductNameFA)
+                        </td>
+                        <td>
+                            <img src="~/Files/Images/Products/@item.DefaultPic" width="140" height="140" class="img-thumbnail img-rounded" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsShowProduct)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OffProduct) %
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CountProduct)
+                        </td>
+                        <td>
+                            @ShamsiPlugin.ToPeString(item.DateProduct)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Weight) &nbsp; گرم
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tbl_Category.CatTitle)- <br />
+                            @Html.DisplayFor(modelItem => item.Tbl_FirstSubCategory.FirstSubCatTitle)- <br />
+                            @Html.DisplayFor(modelItem => item.Tbl_SecondSubCategory.SecondSubCatTitle)- <br />
+                            @Html.DisplayFor(modelItem => item.Tbl_LastSubCategory.LastSubCatTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Tbl_User.UserName) <br />
+                            @Html.DisplayFor(modelItem => item.Tbl_User.FirstName)
+                            @Html.DisplayFor(modelItem => item.Tbl_User.LastName)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" class="btn btn-primary btn-xs" asp-route-id="@item.ProductId">ویرایش</a>
+                            @*<a asp-action="Details" class="btn btn-warning btn-xs" asp-route-id="@item.ProductId">جزئیات</a>*@
+                            @*<a asp-action="" class="btn btn-danger btn-xs" asp-route-id="@item.ProductId">غیر فعال سازی</a>*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

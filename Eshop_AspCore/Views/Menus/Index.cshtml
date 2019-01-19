@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Eshop_AspCore.Data.Models.Menu>
+
+@{
+    ViewData["Title"] = "مدیریت منوها";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-object-group"></i>
+        <h3 class="box-title">مدیریت منوهای سایت</h3>
+    </div>
+    <div class="box-body">
+
+        @if (TempData["Msg"] != null)
+        {
+            <div class="@TempData["Style"] text-center">@TempData["Msg"]</div>
+        }
+        <p>
+            <a class="btn btn-success" asp-action="Create"><i class="fa fa-save"></i>&nbsp; تعریف منوی جدید </a>
+        </p>
+        <table class="table table-bordered table-condensed table-hover table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Link)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Link)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActive)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" class="btn btn-primary btn-xs" asp-route-id="@item.ID">ویرایش</a>
+                            <a asp-action="Delete" class="btn btn-danger btn-xs" asp-route-id="@item.ID">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

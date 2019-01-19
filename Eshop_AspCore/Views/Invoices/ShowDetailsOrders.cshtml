@@ -1,0 +1,68 @@
+﻿@model IEnumerable<VmDetailsOrder>
+@{
+    ViewData["Title"] = "نمایش جزئیات فاکتور";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-user"></i>
+        <h3 class="box-title">جزئیات خریدهای کاربر</h3>
+    </div>
+    <div class="box-body">
+        <div class="alert alert-info text-center">شماره فاکتور &nbsp; @ViewBag.InvoiceId</div>
+        <table class="table-responsive table-bordered table-condensed table-hover table-striped" style="width:100%">
+            <thead>
+                <tr class="text-center">
+                    <th>ردیف</th>
+                    <th>عکس محصول</th>
+                    <th>کد محصول</th>
+                    <th>نام محصول</th>
+                    <th>قیمت محصول</th>
+                    <th>تعداد خرید</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int rowCount = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr class="text-center">
+                            <td>@rowCount</td>
+                            <td><img src="@item.ProductImage" class="img-thumbnail img-circle" width="130" height="120" /></td>
+                            <td>@item.ProductId</td>
+                            <td>@item.ProductName</td>
+                            <td>
+                                @if (item.OffProduct > 0 && item.OffProduct <= 100)
+                                {
+                                    decimal p1 = Math.Ceiling(item.ProductPrice * item.OffProduct / 100);
+                                    decimal p2 = item.ProductPrice - p1;
+                                    decimal FinalPrice = (Math.Ceiling(p2 / 100) * 100);
+                                    <strike><h4>@item.ProductPrice تومان</h4></strike>
+                                    <h4>@FinalPrice  تومان</h4>
+                                    <label class="badge alert-danger iranSansFont">@item.OffProduct % تخفیف</label>
+                                }
+                                else
+                                {
+                                    <h4>&nbsp;</h4>
+                                    <h4>@item.ProductPrice  تومان</h4>
+
+                                }
+                            </td>
+                            <td>@item.ProductCount</td>
+                        </tr>
+                        rowCount = rowCount + 1;
+                    }
+                }
+
+            </tbody>
+        </table>
+
+        <br />
+        <a href="/Invoices/Index" class="btn btn-success text-center">بازگشت</a>
+
+    </div>
+</div>
+
+
+

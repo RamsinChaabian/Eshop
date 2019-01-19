@@ -1,0 +1,58 @@
+﻿@model Eshop_AspCore.Data.Models.Gallery
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Create</h2>
+
+<h4>Gallery</h4>
+<hr />
+@if (TempData["Msg"] != null)
+{
+    <div class="@TempData["Style"] text-center">@TempData["Msg"]</div>
+}
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" name="ProductID" value="@ViewBag.ProductId" />
+            <div class="form-group">
+                <label asp-for="Tbl_Products.ProductNameFA" class="control-label"></label>
+                <input type="text" disabled value="@ViewBag.ProductName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">انتخاب تصویر</label>
+                <div class="col-md-10">
+                    <div id="gallery">
+                        <span>
+                            <input type="file" name="GalleryProduct" value="" />
+                        </span>
+                    </div>
+                    <br />
+                    <button type="button" class="btn btn-info btn-xs" onclick="Addimage()"><i class="fa fa-plus"></i>&nbsp; افزودن عکس جدید</button>
+                    <br />
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="ثبت تصاویر" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script>
+    function Addimage() {
+        $('#gallery').append("<br/><span> <input type='file' name='GalleryProduct' value='' /> </span>")
+    }
+
+</script>

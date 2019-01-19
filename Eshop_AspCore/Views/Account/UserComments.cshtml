@@ -1,0 +1,89 @@
+﻿@model IEnumerable<VmComments>
+    @{
+        ViewData["Title"] = "نظرات من";
+        Layout = "~/Views/Shared/AdminLayout.cshtml";
+    }
+
+    <div class="box box-info">
+        <div class="box-header">
+            <i class="fa fa-user"></i>
+            <h3 class="box-title">نظرات ارسال شده من</h3>
+        </div>
+        <div class="box-body">
+            @if (Model != null)
+            {
+
+                <table class="table-responsive table-bordered table-condensed table-hover table-striped" style="width:100%">
+                    <thead>
+                        <tr class="text-center">
+                            <th>ردیف</th>
+                            <th>نام محصول</th>
+                            <th>عنوان نظر</th>
+                            <th>زمان ثبت نظر</th>
+                            <th>وضعیت تایید</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int rowCount = 1;
+                            foreach (var item in Model)
+                            {
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModal_@item.CommentId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">مشاهده کامل متن نظر</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <div class="col-md-6">
+                                                            <textarea class="form-control" disabled>@item.Text</textarea>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!------------------------------------------------End Modal------------------------------------------------------------------------------->
+                                <tr class="text-center">
+                                    <td>@rowCount</td>
+                                    <td><a href="/Home/DetailsProduct?ProductId=@item.ProductId_FK">@item.ProductName</a></td>
+                                    <td>@item.Title</td>
+                                    <td>@ShamsiPlugin.ToPeString(item.DateComment, "dddd yyyy/MM/dd hh:mm")</td>
+                                    @if (item.ConfirmComment == false)
+                                    {
+                                        <td><label class="label label-danger">تایید نشده</label></td>
+                                    }
+                                    else
+                                    {
+                                        <td><label class="label label-success">تایید شده</label></td>
+
+                                    }
+                                    <td><a class="btn btn-primary btn-xs" data-toggle="modal" data-target="#exampleModal_@item.CommentId">مشاهده متن نظر</a></td>
+
+                                </tr>
+                                rowCount++;
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-danger text-center">تا کنون شما نظری ارسال نکردین</div>
+            }
+        </div>
+    </div>

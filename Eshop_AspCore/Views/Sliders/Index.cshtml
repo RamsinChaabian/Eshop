@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Eshop_AspCore.Data.Models.Slider>
+
+@{
+    ApplicationDbContext database = new ApplicationDbContext();
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    string currentUser = User.Identity.Name;
+    string userId = database.Users.Where(c => c.UserName == currentUser).SingleOrDefault().Id;
+    var qAccess = database.Tbl_UserAccess.Where(u => u.UserId_FK == userId).FirstOrDefault();
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SliderTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Link)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sort)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ServerUpload)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tbl_Files)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SliderTitle)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Link)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sort)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServerUpload)
+                </td>
+                <td>
+                    @{
+                        if (item.ServerUpload == true)
+                        {
+                            var url = item.Tbl_Files.Tbl_Server.HttpDomain.TrimEnd(new char[] { '/' }) + "/" + item.Tbl_Files.Tbl_Server.Path.Trim(new char[] { '/' }) + "/" + item.Tbl_Files.FileName;
+                            <img src="@url" class="img-thumbnail img-rounded" width="180" height="180" />
+                        }
+                        else
+                        {
+                            <img src="~/Files/Images/Slider/@item.Tbl_Files.FileName" class="img-thumbnail img-rounded" width="180" height="180" />
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.SliderId">Edit</a> |
+                    @if (qAccess.DeletePost == true)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.SliderId">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,46 @@
+﻿@{
+    ProductRepository productRepository = new ProductRepository();
+}
+<style>
+    .iranSansFont {
+        font-family: 'Iranian Sans';
+    }
+</style>
+
+<div class="features_items">
+    <!--features_items-->
+
+    @foreach (var item in productRepository.ShowNewProducts())
+    {
+
+        <div class="product-image-wrapper">
+            <div class="single-products">
+                <div class="productinfo form-group">
+                    <img src="@item.DefaultPic" class="img-rounded" style="padding-top:10px" alt="@item.ProductNameEN" />
+
+                    @if (item.OffProduct > 0 && item.OffProduct <= 100)
+                    {
+                        decimal p1 = Math.Ceiling(item.Price * item.OffProduct / 100);
+                        decimal p2 = item.Price - p1;
+                        decimal FinalPrice = (Math.Ceiling(p2 / 100) * 100);
+                        <strike><h4>@item.Price تومان</h4></strike>
+                        <h2>@FinalPrice  تومان</h2>
+                        <label class="badge alert-danger iranSansFont">@item.OffProduct % تخفیف</label>
+                    }
+                    else
+                    {
+                        <h4>&nbsp;</h4>
+                        <h2>@item.Price  تومان</h2>
+
+                    }
+                    <label>&nbsp;&nbsp;&nbsp;</label>
+                    <p>@item.ProductNameFA</p>
+                    <a href="#" class="btn add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبد</a>
+                    <a href="/Home/DetailsProduct?productId=8" class="btn add-to-cart"><i class="glyphicon glyphicon-info-sign"></i>توضیحات</a>                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div><!--features_items-->

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Eshop_AspCore.Data.Models.SecondSubCategory>
+
+@{
+    ApplicationDbContext database = new ApplicationDbContext();
+    ViewData["Title"] = "مدیریت زیر دسته های دوم";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    var q = database.Tbl_FirstSubCategory.ToList();
+}
+
+<div class="box box-info">
+
+    <div class="box-header">
+        <i class="fa fa-group"></i>
+        <h3 class="box-title">مدیریت زیر دسته های دوم</h3>
+    </div>
+    <div class="box-body">
+        <p>
+            <a class="btn btn-success" asp-action="Create"><i class="fa fa-save"></i>&nbsp; تعریف زیر دسته دوم جدید</a>
+        </p>
+        <div class="text-center">
+            <form asp-action="Index" method="post">
+                <label>فیلتر بر اساس زیردسته اول :</label>
+                <select name="firstCatId" class="form-control">
+                    <option value="@null">یک مورد را انتخاب کنید</option>
+                    @foreach (var item in q)
+                    {
+                        <option value="@item.FirstSubCatId">@item.FirstSubCatTitle</option>
+                    }
+
+                </select>
+                <input type="submit" name="btnFilter" value="فیلتر" class="btn btn-info" />
+            </form>
+        </div>
+        <table class="table table-bordered table-condensed table-hover table-responsive table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        زیردسته اول
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SecondSubCatTitle)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @{
+                                var FirstCatName = q.Where(c => c.FirstSubCatId == item.FirstSubCatId_FK).FirstOrDefault().FirstSubCatTitle;
+                            }
+                            @FirstCatName
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SecondSubCatTitle)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" class="btn btn-primary btn-xs" asp-route-id="@item.SecondSubCatId">ویرایش</a>
+                            <a asp-action="Delete" class="btn btn-danger btn-xs" asp-route-id="@item.SecondSubCatId">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

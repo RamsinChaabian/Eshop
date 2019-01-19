@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "FinalCheckout";
+    Layout = "~/Views/Shared/_Main_Layout.cshtml";
+}
+
+<style>
+
+
+    .iranSansFont {
+        font-family: 'IranSans';
+    }
+</style>
+<div class="row">
+    <div class="container">
+        <br />
+        <div class="panel panel-primary iranSansFont">
+            <div class="panel-heading">
+                <div class="panel-title text-center">پرداخت هزینه</div>
+            </div>
+            <div class="panel-body">
+                @if (@TempData["Message"] != null)
+                {
+                    <p class="@TempData["Style"]">@TempData["Message"]</p>
+                }
+                <p>مبلغ قابل پرداخت : @ViewBag.FinalPrice</p>
+
+                @{ 
+                    decimal finalPrice = ViewBag.FinalPrice;
+                    string userId = ViewBag.UserID;
+                    string transactionId = ViewBag.TransactionId;
+
+                }
+                <form asp-action="Payment" asp-controller="Pay">
+                    <input type="hidden" name="FinalPrice" value="@finalPrice" />
+                    <input type="hidden" name="UserID" value="@userId" />
+                    <input type="hidden" name="TransactionId" value="@transactionId" />
+                    <input type="submit" name="btnPay" value="پرداخت" class="btn btn-danger center-block" />
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

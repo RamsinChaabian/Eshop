@@ -1,0 +1,165 @@
+﻿@model IEnumerable<VmShoppingCart>
+@{
+    ViewData["Title"] = "ShoppingCart";
+    Layout = "~/Views/Shared/_Main_Layout.cshtml";
+    int RowCount = 1;
+}
+
+
+<style>
+    .iranSansFont {
+        font-family: iranSans;
+    }
+</style>
+
+@if (Model.Count() > 0)
+{
+    <section id="cart_items">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ol class="breadcrumb">
+                    <li><a href="/Home/Index">خانه</a></li>
+                    <li class="active">سبد خرید</li>
+                </ol>
+            </div>
+
+            <input type="submit" name="btnEmptyShopping" onclick="DeleteAllProduct()" value="خالی کردن سبد خرید" class="btn btn-danger center-block " />
+
+            @*<form method="get" asp-action="RemoveShoppingCart" asp-controller="Pay" onsubmit=" return confirm('ایا میخواهید سبد خرید حذف شود؟')">
+                    <input type="submit" name="btnEmptyShopping" value="خالی کردن سبد خرید" class="btn btn-danger center-block " />
+                    <hr />
+                </form>*@
+
+            <div class="table-responsive cart_info">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr class="cart_menu">
+                            <td>ردیف</td>
+                            <td class="image">تصویر محصول</td>
+                            <td class="description">نام محصول</td>
+                            <td class="price">مبلغ</td>
+                            <td class="quantity">تعداد</td>
+                            <td class="total">جمع کل</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="font-family:iranSans;padding-top:50px">
+                                    <label class="badge">
+                                        @(RowCount++)
+                                    </label>
+                                </td>
+                                <td class="cart_product">
+                                    <a href=""><img src="@item.ProductImage" width="130" height="120" alt=""></a>
+                                </td>
+                                <td class="cart_description iranSansFont" style="padding-top:20px">
+                                    <h4><a href="/Home/DetailsProduct?productId=@item.ProductId_FK">@item.ProductName</a></h4>
+                                    <br />
+                                    <p class="iranSansFont">کد محصول : @item.ProductId_FK </p>
+                                </td>
+                                <td class="cart_price" style="padding-top:30px">
+
+                                    <p class="iranSansFont">@item.PriceWithOff تومان</p>
+                                    <br />
+                                    @if (item.OffProduct > 0)
+                                    {
+                                        <label class="badge alert-danger iranSansFont"> با @item.OffProduct % تخفیف</label>
+                                    }
+                                </td>
+                                <td class="cart_quantity" style="padding-top:30px">
+
+                                    <input class="cart_quantity_input iranSansFont" type="text" name="quantity" value="@item.ProductCount" autocomplete="off" size="2">
+
+                                </td>
+                                <td class="cart_total" style="padding-top:30px">
+                                    <p class="cart_total_price iranSansFont">@(item.PriceWithOff * item.ProductCount) تومان</p>
+                                </td>
+                                <td class="cart_delete" style="padding-top:30px">
+
+                                    <input type="button" name="btnDelete" onclick="DeleteSingleProduct(@item.ID)" value="حذف" class="btn btn-danger btn-xs" />
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+                @{
+
+                    double maliat = ViewBag.Maliat;
+                    double sumWeight = ViewBag.SumWeight;
+                    decimal postagePrice = ViewBag.PostagePrice;
+                    decimal SumPriceOff = ViewBag.SumPrice;
+                    double tax = Convert.ToDouble(SumPriceOff) * maliat;
+                    double maliatPriceOff = (tax + Convert.ToDouble(SumPriceOff));
+                    decimal sump = Math.Ceiling(Convert.ToDecimal((maliatPriceOff / 100) * 100));
+                    double priceWithTax = (maliat * 100);
+                    decimal finalPrice = sump + postagePrice;
+                }
+
+                <form asp-action="CheckoutSendType" asp-controller="Pay" method="post">
+                    <input type="hidden" name="FinalPrice" value="@finalPrice" />
+                    <input type="submit" name="name" value="نهایی کردن سفارشات" class="btn btn-success" />
+                    <input type="button" name="name" value="ادامه  خرید" class="btn btn-primary" />
+                </form>
+                @*@Html.ActionLink("نهایی کردن سفارشات", "CheckoutSendType", new { FinalPrice = finalPrice }, new { @class = "btn btn-success" });*@
+
+            </div>
+
+            <p class="alert alert-warning col-md-3 pull-right iranSansFont"> @priceWithTax % مالیات : @tax  تومان</p>
+            <p class="alert alert-info text-left pull-left container iranSansFont">
+                جمع کل سبد خرید : @SumPriceOff  تومان
+            </p>
+
+            <p class="alert alert-danger text-left pull-left  container iranSansFont">
+                <span class="text-right pull-right badge" style="font-size:medium"> وزن کالا :  @sumWeight گرم</span>&nbsp; &nbsp;  هزینه ارسال با احتساب وزن کالا : @postagePrice  تومان
+            </p>
+            <p class="alert alert-success text-left pull-left container iranSansFont">
+                مبلغ قابل پرداخت : @finalPrice  تومان
+            </p>
+
+        </div>
+    </section>
+}
+else
+{
+    <br />
+    <div class="alert alert-danger center-block text-center iranSansFont">
+        سبد خرید شما خالی می باشد
+    </div>
+
+}
+
+<script>
+    function DeleteSingleProduct(id) {
+        if (confirm('آیا میخواهید این محصول از سبد خرید حذف شود') == true) {
+            $.ajax(
+                {
+                url: "/Pay/RemoveProductOfShoppingCart/" + id,
+                type: "Post",
+                data: { shoppingId: id },
+                complete: function () {
+
+                    location.reload();
+                    @*$('#cart_items').load('@(Url.Action("ShoppingCart","Pay",null))');*@
+                }
+            })
+        }
+    }
+    function DeleteAllProduct() {
+        if (confirm('آیا میخواهید تمامی محصولات از سبد خرید حذف شوند') == true) {
+            $.ajax({
+                url: "/Pay/RemoveAllProductOfShoppingCart/",
+                type: "Get",
+                data:"",
+                complete: function () {
+                    location.reload();
+                }
+            })
+        }
+    }
+</script>

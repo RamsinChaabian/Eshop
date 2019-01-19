@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Eshop_AspCore.Data.Models.Comments>
+
+@{
+    ViewData["Title"] = "مدیریت نظرات کاربران";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-comment"></i>
+        <h3 class="box-title">مدیریت نظرات کاربران</h3>
+    </div>
+    <div class="box-body">
+
+        @if (TempData["Msg"] != null)
+        {
+            <div class="@TempData["Style"] text-center">@TempData["Msg"]</div>
+        }
+        <table class="table table-condensed table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FulllName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Text)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IP)
+                    </th>
+                    <th>
+                        ناریخ ارسال
+                    </th>
+                    <th>
+                        وضعیت تایید
+                    </th>
+                    <th>
+                        عنوان محصول
+                    </th>
+                    <th>ستون عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FulllName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Text)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IP)
+                        </td>
+                        <td>
+                            @ShamsiPlugin.ToPeString(item.DateComment, "dddd yyyy/MM/dd hh:mm")
+                        </td>
+                        <td>
+                            @if (item.ConfirmComment == true)
+                            {
+                                <span class="label label-success">تایید</span>
+                            }
+                            else
+                            {
+                                <span class="label label-danger">تایید نشده</span>
+                            }
+                        </td>
+                        <td>
+                            <a href="/Home/DetailsProduct?productId=@item.Tbl_Products.ProductId">@item.Tbl_Products.ProductNameFA</a>
+                        </td>
+
+                        <td>
+                            @if (item.ConfirmComment == false)
+                            {
+                                <a asp-action="ConfirmComment" class="btn btn-success btn-xs" asp-route-commentId="@item.CommentId">تایید</a>
+                            }
+                            else
+                            {
+                                <a asp-action="ConfirmComment" class="btn btn-warning btn-xs" asp-route-commentId="@item.CommentId">عدم تایید</a>
+                            }
+                            <a asp-action="Delete" onclick="return confirm(' آیا میخواهید این نظر را حذف نمایید؟')" class="btn btn-danger btn-xs" asp-route-id="@item.CommentId">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

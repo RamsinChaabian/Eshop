@@ -1,0 +1,55 @@
+﻿@model Eshop_AspCore.Data.Models.SecondSubCategory
+
+@{
+    ViewData["Title"] = "تعریف زیر دسته دوم";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ApplicationDbContext database = new ApplicationDbContext();
+    var q = database.Tbl_FirstSubCategory.ToList();
+}
+
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-object-group"></i>
+        <h3 class="box-title">تعریف زیر دسته دوم</h3>
+    </div>
+    <div class="box-body">
+        <hr />
+        <div class="row">
+            <div class="col-md-3">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label class="control-label">زیر دسته اول</label>
+                        <select asp-for="FirstSubCatId_FK" class="form-control">
+                            @foreach (var item in q)
+                            {
+                                <option value="@item.FirstSubCatId">@item.FirstSubCatTitle</option>
+                            }
+                        </select>
+                        <span asp-validation-for="FirstSubCatId_FK" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SecondSubCatTitle" class="control-label"></label>
+                        <input asp-for="SecondSubCatTitle" class="form-control" />
+                        <span asp-validation-for="SecondSubCatTitle" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="ثبت" class="btn btn-success" />
+                        <a asp-action="Index" class="btn btn-primary">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-7">
+                <label class="control-label">راهنما</label>
+                <img src="~/images/CatPic3.png" width="700" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

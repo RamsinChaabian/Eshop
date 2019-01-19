@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewData["Title"] = "PayResult";
+    Layout = "~/Views/Shared/_Main_Layout.cshtml";
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}

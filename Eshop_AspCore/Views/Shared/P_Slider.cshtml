@@ -1,0 +1,55 @@
+﻿@{
+    SliderRepository sliderRepository = new SliderRepository();
+}
+
+
+<section id="slider">
+    <!--slider-->
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="carousel slide" id="slider-carousel" data-ride="carousel">
+
+                    <div class="carousel-inner">
+
+                        @foreach (var item in sliderRepository.ShowSlider())
+                        {
+                            string active="";
+                            if (item.SliderId == sliderRepository.ShowSlider().FirstOrDefault().SliderId)
+                            {
+
+                                active="active";
+                            }
+                            <div class="item @active">
+
+                                <div class="carousel-text">
+                                    <h1><span></span></h1>
+                                    <h2>@item.SliderTitle</h2>
+                                    <p>@item.Description</p>
+                                </div>
+                                <div class="carousel-image">
+                                    <img src="@item.ImageUrl"/>
+                                </div>
+
+                                <div class="clear"></div>
+                            </div>
+                        }
+
+                    </div>
+
+                    <a class="left control-carousel hidden-xs" href="#slider-carousel" data-slide="prev">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a class="right control-carousel hidden-xs" href="#slider-carousel" data-slide="next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>

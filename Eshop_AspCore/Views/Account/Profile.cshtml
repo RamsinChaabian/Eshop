@@ -1,0 +1,338 @@
+﻿
+@model VmUser
+@{
+    ViewData["Title"] = "اطلاعات کاربری";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+
+    ViewBag.Userid = Model.UserId;
+    ViewBag.Email = Model.Email;
+}
+
+<link href="~/AdminLayout/Content/jquery-confirm.min.css" rel="stylesheet" />
+<script src="~/AdminLayout/Scripts/jquery-confirm.min.js"></script>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ویرایش اطلاعات کاربری</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="RegisterProfile" asp-controller="Account" method="post">
+                <div class="modal-body">
+
+                    <input type="hidden" name="UserId" value="@ViewBag.Userid" />
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Title">نام : </label>
+                            <div class="col-md-6">
+                                <input class="form-control" id="FirstnameModal" asp-for="FirstName" name="FirstName" placeholder="نام را وارد نمایید" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Title"> نام خانوادگی : </label>
+                            <div class="col-md-6">
+                                <input class="form-control" id="LastnameModal" asp-for="LastName" name="Lastname" placeholder="نام خانوادگی را وارد نمایید" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2" for="Title"> شماره موبایل : </label>
+                            <div class="col-md-6">
+                                <input class="form-control" id="MobileModal" asp-for="Mobile" name="Mobile" placeholder="موبایل را وارد نمایید" onchange="return checkMobileModal()" />
+                                <img src="~/images/ajax_loader.gif" id="loader" hidden />
+                                <span id="StatusModal"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" id="btnSaveModal" onclick="return validateFormModal()" class="btn btn-labeled bg-green-active"> <i class="fa fa-save"></i>ذخیره</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!------------------------------------------------End Modal------------------------------------------------------------------------------->
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-user"></i>
+        <h3 class="box-title">اطلاعات کاربری</h3>
+    </div>
+
+    <div class="box-body">
+
+        @{ if (TempData["Msg"] != null)
+            {
+                <div class="@TempData["Style"]">@TempData["Msg"]</div>
+
+            }
+
+        }
+
+        @if (string.IsNullOrEmpty(Model.Mobile) || string.IsNullOrEmpty(Model.FirstName) || string.IsNullOrEmpty(Model.LastName))
+        {
+            <div class="alert alert-danger text-center">پروفایل شما تکمیل نمی باشد لطفا اطلاعات زیر را تکمیل نمایید</div>
+
+            if (TempData["Message"] != null)
+            {
+                <div class="@TempData["Style"]">@TempData["Message"]</div>
+            }
+
+
+            <form asp-action="RegisterProfile" asp-controller="Account" method="post">
+
+                <input type="hidden" name="UserId" value="@ViewBag.Userid" />
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Title">نام : </label>
+                        <div class="col-md-6">
+                            <input class="form-control" id="txtFirstname" asp-for="FirstName" name="FirstName" placeholder="نام را وارد نمایید" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Title"> نام خانوادگی : </label>
+                        <div class="col-md-6">
+                            <input class="form-control" id="txtLastname" asp-for="LastName" name="Lastname" placeholder="نام خانوادگی را وارد نمایید" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="Title"> شماره موبایل : </label>
+                        <div class="col-md-6">
+                            <input class="form-control" id="txtMobile" asp-for="Mobile" name="Mobile" placeholder="موبایل را وارد نمایید" onchange="return checkMobile()" />
+                            <img src="~/images/ajax_loader.gif" id="loader" hidden />
+                            <span id="Status"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer clearfix">
+                    <div class="col-md-10 col-md-offset-2">
+                        <button type="submit" id="btnSave" onclick="return validateForm()" class="btn btn-labeled bg-green-active"> <i class="fa fa-save"></i>ذخیره</button>
+                    </div>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="col-md-12">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <i class="fa fa-user"></i>
+                        <span> نام و نام خانوادگی  : @(Model.FirstName + " " + Model.LastName)</span>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <i class="fa fa-send"></i>
+                        <span> ایمیل  : @Model.Email</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <i class="fa fa-mobile"></i>
+                        <span> شماره موبایل  : @Model.Mobile</span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="btnSave" onclick="return validateForm()" class="btn btn-danger center-block" data-toggle="modal" data-target="#exampleModal">
+                ویرایش اطلاعات کاربری
+            </button>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function validateForm() {
+        var Firstname = $('#txtFirstname').val();
+        var Lastname = $('#txtLastname').val();
+        var Mobile = $('#txtMobile').val();
+
+        if (Firstname == "") {
+            $('#txtFirstname').focus();
+            $.alert({
+                title: 'خطا',
+                content: 'لطفا نام را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+        if (Lastname == "") {
+            $('#txtLastname').focus();
+
+            $.alert({
+                title: 'خطا',
+                content: 'لطفا نام خانوادگی را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+        if (Mobile == "") {
+
+            $('#txtMobile').focus();
+
+            $.alert({
+                title: 'خطا',
+                content: 'لطفا موبایل را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+
+        return true;
+    }
+        //-------------validationModal-----------------//
+    function validateFormModal() {
+        var Firstname = $('#FirstnameModal').val();
+        var Lastname = $('#LastnameModal').val();
+        var Mobile = $('#MobileModal').val();
+
+        if (Firstname == "") {
+            $('#FirstnameModal').focus();
+            $.alert({
+                title: 'خطا',
+                content: 'لطفا نام را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+        if (Lastname == "") {
+            $('#LastnameModal').focus();
+
+            $.alert({
+                title: 'خطا',
+                content: 'لطفا نام خانوادگی را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+        if (Mobile == "") {
+
+            $('#MobileModal').focus();
+
+            $.alert({
+                title: 'خطا',
+                content: 'لطفا موبایل را وارد نمایید',
+                rtl: true,
+                closeIcon: true,
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    confirm: {
+                        text: 'تایید',
+                        btnClass: 'btn-red',
+                    }
+                },
+            });
+
+            return false;
+        }
+
+        return true;
+    }
+//-------------CheckExistMobile-----------------//
+    function checkMobile() {
+
+        $('#loader').prop("hidden", false);
+        $.post("@Url.Action("CheckMobileExist", "Account")",
+            {
+                Mobile: $("#txtMobile").val()
+            },
+            function (data) {
+                if (data == 0) {
+                    $('#Status').html('<font color="Green"></font>');
+                    $('#txtMobile').css("border-color", "Green");
+                    $('#btnSave').prop("disabled", false);
+                    $('#loader').prop("hidden", true);
+
+                } else {
+                    $('#Status').html('<font color="red">شماره موبایل وارد شده از قبل در سیستم موجود می باشد</font>');
+                    $('#txtMobile').css("border-color", "red");
+                    $('#btnSave').prop("disabled", true);
+                    $('#loader').prop("hidden", true);
+                }
+             });
+    }
+//-------------CheckExistMobileModal-----------------//
+    function checkMobileModal() {
+
+        $('#loader').prop("hidden", false);
+        $.post("@Url.Action("CheckMobileExist", "Account")",
+            {
+                Mobile: $("#MobileModal").val()
+            },
+            function (data) {
+                if (data == 0) {
+                    $('#StatusModal').html('<font color="Green"></font>');
+                    $('#MobileModal').css("border-color", "Green");
+                    $('#btnSaveModal').prop("disabled", false);
+                    $('#loader').prop("hidden", true);
+
+                } else {
+                    $('#StatusModal').html('<font color="red">شماره موبایل وارد شده از قبل در سیستم موجود می باشد</font>');
+                    $('#MobileModal').css("border-color", "red");
+                    $('#btnSaveModal').prop("disabled", true);
+                    $('#loader').prop("hidden", true);
+                }
+             });
+    }
+
+</script>

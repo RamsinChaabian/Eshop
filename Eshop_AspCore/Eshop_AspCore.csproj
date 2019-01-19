@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>a75b20e0-7723-4697-96bc-655fad8f2c6f</UserSecretsId>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="wwwroot\Files\Images\Slider\product1.jpg" />
+    <None Remove="wwwroot\Files\Images\Slider\product2.jpg" />
+    <None Remove="wwwroot\Files\Images\Slider\product3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.0.1" />
+    <PackageReference Include="Microsoft.entityframeworkCore" Version="2.0.1" />
+    <PackageReference Include="Microsoft.entityframeworkCore.SqlServer" Version="2.0.1" />
+    <PackageReference Include="Microsoft.entityframeworkCore.Tools" Version="2.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />
+    <PackageReference Include="SmsIrRestful" Version="1.1.0" />
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.4.*" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.4.*" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.4.*" />
+    <PackageReference Include="System.ServiceModel.Security" Version="4.4.*" />
+    <PackageReference Include="Zarinpal" Version="2.0.4" />
+    <PackageReference Include="ZarinpalSandbox" Version="2.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Connected Services\" />
+    <Folder Include="wwwroot\Files\Images\Products\Gallery\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\AdminLayout\Content\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\AdminLayout\Content\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\AdminLayout\Content\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\AdminLayout\Scripts\bootstrap.rtl.min.js" />
+    <None Include="wwwroot\AdminLayout\Scripts\chart.js" />
+    <None Include="wwwroot\AdminLayout\Scripts\example-data.js" />
+    <None Include="wwwroot\AdminLayout\Scripts\jquery.min.js" />
+    <None Include="wwwroot\AdminLayout\Scripts\panel.js" />
+    <None Include="wwwroot\AdminLayout\Scripts\prism.js" />
+    <None Include="wwwroot\AdminLayout\Scripts\simple.datagrid.js" />
+    <None Include="wwwroot\engine\js\jquery.min.js" />
+    <None Include="wwwroot\engine\js\visuallightbox.js" />
+    <None Include="wwwroot\engine\js\vlbdata1.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
+  </ItemGroup>
+</Project>

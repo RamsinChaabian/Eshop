@@ -1,0 +1,169 @@
+﻿@model Eshop_AspCore.Data.Models.Products
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var items = "<option vlaue='0'>-- انتخاب کنید --</option>";
+        $('#Cat2').html(items);
+        $('#Cat3').html(items);
+        $('#Cat4').html(items);
+    });
+</script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('#Cat1').change(function () {
+                var url = '@Url.Content("~/")' + "Products/GetSubCategory2";
+                var ddlsource = "#Cat1";
+                $.getJSON(url, { Cat1: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $("#Cat2").empty();
+                    $.each(data, function (i, cat2) {
+                        items += "<option value='" + cat2.value + "'>" + cat2.text + "</option>";
+                    });
+                    $('#Cat2').html(items);
+                });
+            });
+
+            $('#Cat2').change(function () {
+                var url = '@Url.Content("~/")' + "Products/GetSubCategory3";
+                var ddlsource = "#Cat2";
+                $.getJSON(url, { Cat2: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $('#Cat3').empty();
+                    $.each(data, function (i, cat3) {
+                        items += "<option value='" + cat3.value + "'>" + cat3.text + "</option>";
+                    });
+                    $('#Cat3').html(items);
+                });
+            });
+
+              $('#Cat3').change(function () {
+                var url = '@Url.Content("~/")' + "Products/GetSubCategory4";
+                var ddlsource = "#Cat3";
+                $.getJSON(url, { Cat3: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $('#Cat4').empty();
+                    $.each(data, function (i, cat4) {
+                        items += "<option value='" + cat4.value + "'>" + cat4.text + "</option>";
+                    });
+                    $('#Cat4').html(items);
+                });
+            });
+
+        });
+</script>
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-object-group"></i>
+        <h3 class="box-title">ویرایش محصول</h3>
+    </div>
+    <div class="box-body">
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="ProductId" />
+                    <div class="form-group">
+                        <label asp-for="CategoryId_FK" class="control-label"></label>
+                        <select asp-for="CategoryId_FK" id="Cat1" name="Cat1" class="form-control" asp-items="@(new SelectList(ViewBag.ListOfCategory,"CatId","CatTitle"))"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FirstSubCat_FK" class="control-label"></label>
+                        <select asp-for="FirstSubCat_FK" id="Cat2" name="Cat2" class="form-control" asp-items="@(new SelectList(string.Empty,"FirstSubCatId","FirstSubCatTitle"))"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SecondSubCat_FK" class="control-label"></label>
+                        <select asp-for="SecondSubCat_FK" id="Cat3" name="Cat3" class="form-control" asp-items="@(new SelectList(string.Empty,"SecondSubCatId","SecondSubCatTitle"))"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastSubCat_FK" class="control-label"></label>
+                        <select asp-for="LastSubCat_FK" id="Cat4" name="Cat4" class="form-control" asp-items="@(new SelectList(string.Empty,"LastSubCatId","LastSubCatTitle"))"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ProductCode" class="control-label"></label>
+                        <input asp-for="ProductCode" class="form-control" />
+                        <span asp-validation-for="ProductCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProductNameFA" class="control-label"></label>
+                        <input asp-for="ProductNameFA" class="form-control" />
+                        <span asp-validation-for="ProductNameFA" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProductNameEN" class="control-label"></label>
+                        <input asp-for="ProductNameEN" class="form-control" />
+                        <span asp-validation-for="ProductNameEN" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DefaultPic" class="control-label"></label>
+                        <input asp-for="DefaultPic" class="form-control" />
+                        <span asp-validation-for="DefaultPic" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SeeProduct" class="control-label"></label>
+                        <input asp-for="SeeProduct" class="form-control" />
+                        <span asp-validation-for="SeeProduct" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label>
+                                <input asp-for="IsShowProduct" /> @Html.DisplayNameFor(model => model.IsShowProduct)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="OffProduct" class="control-label"></label>
+                        <input asp-for="OffProduct" class="form-control" />
+                        <span asp-validation-for="OffProduct" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CountProduct" class="control-label"></label>
+                        <input asp-for="CountProduct" class="form-control" />
+                        <span asp-validation-for="CountProduct" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DateProduct" class="control-label"></label>
+                        <input asp-for="DateProduct" class="form-control" />
+                        <span asp-validation-for="DateProduct" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Weight" class="control-label"></label>
+                        <input asp-for="Weight" class="form-control" />
+                        <span asp-validation-for="Weight" class="text-danger"></span>
+                    </div>
+                    @*<div class="form-group">
+                        <label asp-for="UserId_FK" class="control-label"></label>
+                        <select asp-for="UserId_FK" class="form-control" asp-items="ViewBag.UserId_FK"></select>
+                        <span asp-validation-for="UserId_FK" class="text-danger"></span>
+                    </div>*@
+                    <div class="form-group">
+                        <input type="submit" value="ذخیره" class="btn btn-success" />
+                        <a asp-action="Index" class="btn btn-primary">بازگشت</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

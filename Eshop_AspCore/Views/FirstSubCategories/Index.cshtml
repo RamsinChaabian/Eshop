@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Eshop_AspCore.Data.Models.FirstSubCategory>
+
+@{
+    ApplicationDbContext database = new ApplicationDbContext();
+    ViewData["Title"] = "مدیریت زیر دسته های اول";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    var q = database.Tbl_Category.ToList();
+}
+
+<div class="box box-info">
+
+    <div class="box-header">
+        <i class="fa fa-group"></i>
+        <h3 class="box-title">مدیریت زیردسته های اول</h3>
+    </div>
+    <div class="box-body">
+        @if (TempData["Msg"] != null)
+        {
+            <div class="@TempData["Style"] text-center">@TempData["Msg"]</div>
+        }
+        <p>
+            <a class="btn btn-success" asp-action="Create"><i class="fa fa-save"></i>&nbsp; تعریف زیر دسته جدید</a>
+        </p>
+        <div class="text-center">
+            <form asp-action="Index" method="post">
+                <label>فیلتر بر اساس دسته اصلی :</label>
+                <select name="catId" class="form-control">
+                    <option value="@null">یک مورد را انتخاب کنید</option>
+                    @foreach (var item in q)
+                    {
+                        <option value="@item.CatId">@item.CatTitle</option>
+                    }
+
+                </select>
+                <input type="submit" name="btnFilter" value="فیلتر" class="btn btn-info" />
+            </form>
+        </div>
+        <table class="table table-bordered table-hover table-responsive table-striped">
+
+            <thead>
+                <tr>
+                    <th>
+                        دسته اصلی
+                    </th>
+                    <th>
+                        عنوان زیر دسته اول
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Picture)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center">
+                        <td>
+                            @{
+                                var CatName = q.Where(c => c.CatId == item.CatId_FK).FirstOrDefault().CatTitle;
+                            }
+                            @CatName
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstSubCatTitle)
+                        </td>
+                        <td>
+                            <img src="~/Files/Images/@item.Picture" width="120" height="100" />
+                        </td>
+                        <td>
+                            <a asp-action="Edit" class="btn btn-primary btn-xs" asp-route-id="@item.FirstSubCatId">ویرایش</a> &nbsp;
+                            <a asp-action="Delete" class="btn btn-danger btn-xs" asp-route-id="@item.FirstSubCatId">حذف</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

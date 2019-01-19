@@ -1,0 +1,52 @@
+﻿@model VmUser
+@{
+    ViewData["Title"] = "CheckoutSendType";
+    Layout = "~/Views/Shared/_Main_Layout.cshtml";
+}
+
+<style>
+
+    .iranSansFont {
+        font-family: 'IranSans';
+    }
+</style>
+<div class="row">
+    <div class="container">
+        <br />
+        <div class="panel panel-primary iranSansFont">
+            <div class="panel-heading">
+                <div class="panel-title text-center">تایید اطلاعات کاربری</div>
+            </div>
+            <div class="panel-body">
+                <p>نام و نام خانوادگی : @(Model.FirstName + " " + Model.LastName)</p>
+                <p>ایمیل : @Model.Email</p>
+                <p>شماره موبایل : @Model.Mobile</p>
+                <a asp-action="Profile" asp-controller="Account" class="btn btn-success">ویرایش اطلاعات کاربری</a>
+                <hr />
+                <p>استان : @Model.Province</p>
+                <p>شهر : @Model.City</p>
+
+                <p>ادرس محل سکونت : @(Model.Province + " - " + Model.City + " - " + Model.Address) &nbsp; کد پستی : @Model.PostalCode</p>
+
+                <a asp-action="PostInfo" asp-controller="Account" class="btn btn-primary">ویرایش اطلاعات محل سکونت</a>
+                <hr />
+                <div>
+                    @{
+                        decimal finalPrice = ViewBag.FinalPrice;
+                    }
+
+                    <form method="get" asp-action="FinalCheckout" asp-controller="Pay">
+                        <a asp-action="ShoppingCart" asp-controller="Pay" class="btn btn-warning ">مرحله قبل</a>
+                        <input type="hidden" name="FinalPrice" value="@finalPrice" />
+                        <input type="submit" name="NextLevel" value="مرحله بعد" class="btn btn-success pull-left " />
+                        @*<a asp-action="ShoppingCart" asp-controller="Pay" class="btn btn-success pull-left ">مرحله بعد</a>*@
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

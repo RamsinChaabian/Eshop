@@ -1,0 +1,146 @@
+﻿@{
+    CommentRepository Rep_Comments = new CommentRepository();
+    string currentUser = User.Identity.Name;
+    ApplicationDbContext database = new ApplicationDbContext();
+    var qUser = database.Users.Where(c => c.UserName == currentUser).SingleOrDefault();
+    var qRole = database.Tbl_Role.Where(c => c.RoleName == "Admin" || c.RoleName == "User").FirstOrDefault();
+    var qAccess = database.Tbl_UserAccess.Where(c => c.RoleId_FK == qRole.RoleId && c.UserId_FK == qUser.Id).SingleOrDefault();
+}
+
+<ul class="sidebar-menu">
+    @if (qAccess != null)
+    {
+        <li>
+        </li>
+        <li class="header">بخش مدیریت</li>
+        <li class="treeview">
+            <a href="/Dashboard/Index">
+                <i class="fa fa-dashboard"></i> <span>داشبورد</span>
+            </a>
+        </li>
+        <li class="treeview">
+            <a>
+                <i class="fa fa-info"></i>
+                <span>تنظیمات کابری</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="/Account/Profile"><i class="fa fa-plus"></i>اطلاعات کاربری</a></li>
+                <li><a href="/Account/ChangePassword"><i class="fa fa-check"></i>تغییر کلمه عبور</a></li>
+            </ul>
+        </li>
+
+        <li class="treeview">
+            <a href="/Account/SendNewsLetter">
+                <i class="fa fa-send"></i> <span>ارسال خبرنامه</span>
+            </a>
+        </li>
+        <li class="treeview">
+            <a href="/Products/Index">
+                <i class="fa fa-plus"></i> <span>مدیریت محصولات</span>
+            </a>
+        </li>
+        <li class="treeview">
+            <a>
+                <i class="fa fa-newspaper-o"></i>
+                <span>مدیریت دسته ها</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="/Categories/Index"><i class="fa fa-plus"></i>تعریف دسته اصلی</a></li>
+                <li><a href="/FirstSubCategories/Index"><i class="fa fa-check"></i> تعریف زیر دسته اول</a></li>
+                <li><a href="/SecondSubCategories/Index"><i class="fa fa-check"></i> تعریف زیر دسته دوم</a></li>
+                <li><a href="/LastSubCategories/Index"><i class="fa fa-check"></i> تعریف زیر دسته اخر</a></li>
+            </ul>
+        </li>
+        <li class="treeview">
+            <a href="/Menus/Index">
+                <i class="fa fa-link"></i> <span>مدیریت منو ها</span>
+            </a>
+        </li>
+        <li class="treeview">
+            <a href="/Comments/Index">
+                <i class="fa fa-comments"></i> <span>دیدگاه ها</span>
+                <small class="label pull-right bg-red">
+                    @Rep_Comments.GetCountAllUnConfirmComments()
+                </small>
+            </a>
+        </li>
+        <li class="treeview">
+            <a href="/Servers/Index">
+                <i class="fa fa-server"></i> <span>تنظیمات آپلود سرور</span>
+            </a>
+        </li>
+        <li class="treeview">
+            <a>
+                <i class="fa fa-newspaper-o"></i>
+                <span>مدیریت گالری عکس ها</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="/Files/Index"><i class="fa fa-image"></i>مدیریت عکس های اسلایدر</a></li>
+                <li><a href="/Galleries/Index"><i class="fa fa-picture-o"></i> مدیریت گالری عکس محصولات</a></li>
+                <li><a href="/WebContent/Index"><i class="fa fa-server"></i>عکس های سرور</a></li>
+                <li><a href="/WebContent/Gallery"><i class="fa fa-upload"></i>رسانه ها</a></li>
+
+            </ul>
+        </li>
+
+        <li class="treeview">
+            <a href="/Invoices/Index">
+                <i class="fa fa-server"></i><span><label class="pull-left bg-red"></label> سفارشات کاربران</span>
+            </a>
+        </li>
+        <li class="treeview">
+            <a href="/Sliders/Index">
+                <i class="fa fa-sliders"></i> <span>مدیریت اسلایدر</span>
+            </a>
+        </li>
+
+        <li class="treeview">
+            <a>
+                <i class="fa fa-newspaper-o"></i>
+                <span>مدیریت سطوح دسترسی</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="/Roles/Index"><i class="fa fa-plus"></i>تعریف سطح دسترسی</a></li>
+                <li><a href="/UserAccesses/Index"><i class="fa fa-check"></i> مدیریت دسترسی کاربران</a></li>
+            </ul>
+        </li>
+    }
+    else
+    {
+        <li>
+        </li>
+        <li class="header">بخش کاربری</li>
+        <li class="treeview">
+            <a>
+                <i class="fa fa-info"></i>
+                <span>تنظیمات کابری</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="/Account/Profile"><i class="fa fa-plus"></i>اطلاعات کاربری</a></li>
+                <li><a href="/Account/ChangePassword"><i class="fa fa-check"></i>تغییر کلمه عبور</a></li>
+            </ul>
+        </li>
+
+        <li class="treeview">
+            <a href="/Account/ListOrders">
+                <i class="fa fa-shopping-cart"></i> <span>سفارشات من</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="/Account/UserComments">
+                <i class="fa fa-envelope-o"></i>
+                <span>نظرات من</span>
+                <small class="label pull-right bg-red">
+                    @Rep_Comments.GetCountUnConfirmComments(currentUser)
+                </small>
+            </a>
+        </li>
+
+    }
+</ul>

@@ -1,0 +1,45 @@
+﻿@model  Eshop_AspCore.Data.Models.LastSubCategory
+
+@{
+    ApplicationDbContext database = new ApplicationDbContext();
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    var q = database.Tbl_SecondSubCategory.ToList();
+}
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-object-group"></i>
+        <h3 class="box-title">حذف دسته</h3>
+    </div>
+    <div class="box-body">
+
+        <div>
+            <h3>آیا میخواهید این دسته را حذف نمایید؟</h3>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    عنوان زیر دسته دوم
+                </dt>
+                <dd>
+                    @{
+                        var SecondCatName = q.Where(c => c.SecondSubCatId == Model.SecondSubCatId_FK).FirstOrDefault().SecondSubCatTitle;
+                    }
+                    @SecondCatName
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.LastSubCatTitle)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.LastSubCatTitle)
+                </dd>
+            </dl>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="LastSubCatId" />
+                <input type="submit" value="حذف" class="btn btn-danger" />
+                <a asp-action="Index" class="btn btn-primary ">انصراف</a>
+            </form>
+        </div>
+    </div>
+</div>

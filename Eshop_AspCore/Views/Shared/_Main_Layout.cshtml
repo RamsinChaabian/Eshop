@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>فروشگاه من</title>
+    <link rel="shortcut icon" href="#">
+    <link href="~/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/css/menu.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <link href="~/css/style-menu.css" rel="stylesheet" />
+
+    <style>
+        .nav-column {
+            background-color: #f6f6f6;
+        }
+
+        .header {
+            margin-top: -6px;
+            border-top: 6px solid #000000;
+            background: #fcfcfc;
+            height: 90px;
+            min-width: 1040px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+
+        .sub-header {
+            max-width: 1040px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative
+        }
+    </style>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+
+</head>
+<body>
+    <header id="header">
+        <!--header-->
+        <!--Section Partial Top Menu-->
+        @await Html.PartialAsync("P_TopMenu")
+        <!--/header_top-->
+
+        <div class="header-middle">
+            <!--header-middle-->
+            <div class="container">
+                <div class="logo">
+                    <a href="/">
+                        <img src="~/images/logo1.png" alt="" />
+                        <b style="font-family:IRANSansMobile"> فروشگاه اینترنتی</b>
+
+                    </a>
+                </div>
+                <div class="shop-menu">
+                    <ul>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li><a href="/Account/Profile" target="_blank"><i class="fa fa-lock"></i> پنل کاربری</a></li>
+                            <li><a href="/Account/LogOff" onclick="return confirm('آیا میخواهید از سایت خارج شوید؟')"><i class="fa fa-lock"></i>خروج </a></li>
+                        }
+                        else
+                        {
+                            <li><a href="/Account/Login"><i class="fa fa-lock"></i> ورود</a></li>
+                            <li><a href="/Account/Register"><i class="fa fa-user"></i> ثبت نام</a></li>
+                        }
+
+                        @{
+                            Eshop_AspCore.Repository.ProductRepository Rep_Product = new ProductRepository();
+                            string currentUser = User.Identity.Name;
+                        }
+                        <li><a href="/Pay/ShoppingCart"><i class="fa fa-shopping-cart"></i> سبد‌خرید<label class="label label-danger">@Rep_Product.GetCountShoppingCartItem(currentUser)</label></a></li>
+
+                    </ul>
+                </div>
+                <div class="clear"></div>
+
+            </div>
+
+        </div><!--/header-middle-->
+
+    </header><!--/header-->
+    <!--Section Partial Category-->
+
+    @await Html.PartialAsync("P_Category")
+
+    <!--Section Partial Category-->
+
+    <div class="container">
+
+        @RenderBody()
+
+    </div>
+
+    <footer id="footer">
+        <!--Footer-->
+        <div class="footer-widget">
+
+            <div class="single-widget">
+                <h2>&nbsp;&nbsp; خبرنامه فروشگاه</h2>
+
+            </div>
+            <div class="clear"></div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container text-center">
+                <p>کلیه حقوق برای سازنده این سایت محفوظ است.</p>
+            </div>
+        </div>
+
+    </footer><!--/Footer-->
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

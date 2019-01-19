@@ -1,0 +1,69 @@
+﻿@{
+    CategoryRepository Rep_Category = new CategoryRepository();
+
+}
+
+<div class="container">
+
+
+    <div class="menubar">
+
+        <div class="menu-wrapper">
+            <ul class="nav">
+                @foreach (var item in Rep_Category.ShowCategories())  // نمایش دسته اصلی
+                {
+                    <li>
+                        <a href="@item.Link" title="@item.CatTitle">@item.CatTitle</a>
+                        <div class="layer2">
+                            <div class="nav-column">
+                                <ul class="nav inner">
+                                    @foreach (var item2 in Rep_Category.ShowFirstSubCategory().Where(a => a.CatId_FK == item.CatId))  // نمایش زیر دسته اول
+                                    {
+                                        <li>
+                                            <a href="/Home/Search?FirstCatId=@item2.Link" +title="@item2.FirstSubCatTitle"> @item2.FirstSubCatTitle</a>
+                                            <div style="background:url(@item2.Picture) no-repeat left;background-color:#f6f6f6">
+
+                                                @foreach (var item3 in Rep_Category.ShowSecondSubCategory().Where(b => b.FirstSubCatId_FK == item2.FirstSubCatId))  // نمایش زیر دسته دوم - سر ستون ها
+                                                {
+                                                    <div class="nav-column  border">
+                                                        <a class="head" href="@item3.Link" title="@item3.SecondSubCatTitle">@item3.SecondSubCatTitle</a>
+                                                        <ul>
+                                                            @foreach (var item4 in Rep_Category.ShowLastSubCategory().Where(c => c.SecondSubCatId_FK == item3.SecondSubCatId))
+                                                            {
+                                                                <li>
+                                                                    <a href="@item4.Link" title="@item4.LastSubCatTitle"> @item4.LastSubCatTitle</a>
+                                                                </li>
+                                                            }
+
+
+
+                                                        </ul>
+                                                    </div>
+
+                                                }
+
+
+
+                                            </div>
+                                        </li>
+                                    }
+
+
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+
+
+
+            </ul>
+        </div>
+
+    </div>
+
+
+
+</div>
+

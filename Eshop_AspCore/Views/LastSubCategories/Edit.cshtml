@@ -1,0 +1,53 @@
+﻿@model Eshop_AspCore.Data.Models.LastSubCategory
+
+@{
+    ApplicationDbContext database = new ApplicationDbContext();
+    ViewData["Title"] = "ویرایش زیر دسته اخر";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    var q = database.Tbl_SecondSubCategory.ToList();
+}
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-object-group"></i>
+        <h3 class="box-title">ویرایش زیر دسته اخر</h3>
+    </div>
+    <div class="box-body">
+        <hr />
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="LastSubCatId" />
+                    <div class="form-group">
+                        <label asp-for="SecondSubCatId_FK" class="control-label">عنوان زیر دسته دوم</label>
+                        <select asp-for="SecondSubCatId_FK" class="form-control">
+                            @foreach (var item in q)
+                            {
+                                <option value="@item.SecondSubCatId">@item.SecondSubCatTitle</option>
+                            }
+                        </select>
+                        <span asp-validation-for="SecondSubCatId_FK" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastSubCatTitle" class="control-label"></label>
+                        <input asp-for="LastSubCatTitle" class="form-control" />
+                        <span asp-validation-for="LastSubCatTitle" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="ذخیره" class="btn btn-success" />
+                        <a asp-action="Index" class="btn btn-danger">انصراف</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

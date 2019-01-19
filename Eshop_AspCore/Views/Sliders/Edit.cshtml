@@ -1,0 +1,89 @@
+﻿@model Eshop_AspCore.Data.Models.Slider
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<h4>Slider</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SliderId" />
+            <div class="form-group">
+                <label asp-for="FileId_FK" class="control-label">تصویر</label>
+                <input type="file" name="ImageUpload" id="ImageUpload" onchange="ShowPreview(this)" />
+                <br />
+                <br />
+                @{
+                    if (Model.ServerUpload == true)
+                    {
+                        var url = Model.Tbl_Files.Tbl_Server.HttpDomain.TrimEnd(new char[] { '/' }) + "/" + Model.Tbl_Files.Tbl_Server.Path.Trim(new char[] { '/' }) + "/" + Model.Tbl_Files.FileName;
+                        <img id="ImgPrev" src="@url" height="200" alt="@Model.SliderTitle" class="img-rounded img-thumbnail" />
+                    }
+                    else
+                    {
+                        <img id="ImgPrev" src="~/Files/Images/Slider/@Model.Tbl_Files.FileName" height="200" alt="@Model.SliderTitle" class="img-rounded img-thumbnail" />
+                    }
+                }
+            </div>
+            <div class="form-group">
+                <label asp-for="SliderTitle" class="control-label"></label>
+                <input asp-for="SliderTitle" class="form-control" />
+                <span asp-validation-for="SliderTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Link" class="control-label"></label>
+                <input asp-for="Link" class="form-control" />
+                <span asp-validation-for="Link" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sort" class="control-label"></label>
+                <input asp-for="Sort" class="form-control" />
+                <span asp-validation-for="Sort" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="ServerUpload" /> @Html.DisplayNameFor(model => model.ServerUpload)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        function ShowPreview(input) {
+            if (input.files && input.files[0]) {
+                var ImageDir = new FileReader();
+                ImageDir.onload = function (e) {
+                    $('#ImgPrev').attr('src', e.target.result);
+
+                }
+                ImageDir.readAsDataURL(input.files[0]);
+
+            }
+
+        }
+    </script>
+}

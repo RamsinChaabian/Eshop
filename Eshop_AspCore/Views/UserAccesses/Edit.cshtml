@@ -1,0 +1,55 @@
+﻿@model Eshop_AspCore.Data.Models.UserAccess
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <input type="hidden" name="UserId_FK" asp-for="UserId_FK" />
+            </div>
+            <div class="form-group">
+                <label asp-for="RoleId_FK" class="control-label"></label>
+                <select asp-for="RoleId_FK" class="form-control" asp-items="ViewBag.RoleId_FK"></select>
+                <span asp-validation-for="RoleId_FK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="AddPost" /> @Html.DisplayNameFor(model => model.AddPost)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="DeletePost" /> @Html.DisplayNameFor(model => model.DeletePost)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="EditPost" /> @Html.DisplayNameFor(model => model.EditPost)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

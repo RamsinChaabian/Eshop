@@ -1,0 +1,48 @@
+﻿@model Eshop_AspCore.Data.Models.SecondSubCategory
+
+@{
+    ApplicationDbContext database = new ApplicationDbContext();
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    var q = database.Tbl_FirstSubCategory.ToList();
+}
+
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-group"></i>
+        <h3 class="box-title">ویرایش زیر دسته دوم</h3>
+    </div>
+    <div class="box-body">
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="SecondSubCatId" />
+                    <div class="form-group">
+                        <label class="control-label">زیر دسته دوم</label>
+                        <select asp-for="FirstSubCatId_FK" class="form-control">
+                            @foreach (var item in q)
+                            {
+                                <option value="@item.FirstSubCatId">@item.FirstSubCatTitle</option>
+                            }
+
+                        </select>                        <span asp-validation-for="FirstSubCatId_FK" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SecondSubCatTitle" class="control-label"></label>
+                        <input asp-for="SecondSubCatTitle" class="form-control" />
+                        <span asp-validation-for="SecondSubCatTitle" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="ذخیره" class="btn btn-success" />
+                        <a asp-action="Index" class="btn btn-danger">انصراف</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

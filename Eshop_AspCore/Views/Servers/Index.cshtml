@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Eshop_AspCore.Data.Models.Server>
+
+@{
+    ViewData["Title"] = "مدیریت سرور";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<div class="box box-info">
+    <div class="box-header">
+        <i class="fa fa-object-group"></i>
+        <h3 class="box-title">مدیریت سرور</h3>
+    </div>
+    <div class="box-body">
+
+        @if (TempData["Msg"] != null)
+        {
+            <div class="@TempData["Style"] text-center">@TempData["Msg"]</div>
+        }
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ServerTitle)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IP)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HttpDomain)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ServerTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IP)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.HttpDomain)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" class="btn btn-success" asp-route-id="@item.ServerId">ویرایش</a> 
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

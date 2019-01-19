@@ -1,0 +1,99 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Main_Layout.cshtml";
+}
+<style>
+    .productinfo h4 {
+        color: #FE980F;
+        font-family: IRANSans;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .iranSansFont {
+        font-family: 'IranSans';
+    }
+</style>
+<!--slider-->
+@await Html.PartialAsync("P_Slider")
+
+<!--/slider-->
+
+<section>
+
+
+    <!-- Start Category -->
+    @await Html.PartialAsync("P_RightMenuCategory")
+    <!--End Category-->
+
+    <div class="content">
+        <h2 class="subject">جدیدترین محصولات</h2>
+        <!--features_items-->
+
+        @await Html.PartialAsync("P_NewProduct")
+
+        @await Html.PartialAsync("P_NewProductByCategory")
+
+        <div class="category-tab">
+            <!--category-tab-->
+            <ul>
+                <li><a href="#" class="active">پرفروش ترین محصولات</a></li>
+
+            </ul>
+            <div class="tab-content">
+                <div class="product-image-wrapper">
+                    <div class="single-products">
+                        <div class="productinfo ">
+                            <img src="images/gallery1.jpg" alt="" />
+                            <h2>۲۵۰ هزار تومان</h2>
+                            <p>لورم ایپسوم متن ساختگی</p>
+                            <a href="#" class="btn  add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبد</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="product-image-wrapper">
+                    <div class="single-products">
+                        <div class="productinfo ">
+                            <img src="images/gallery2.jpg" alt="" />
+                            <h2>۲۵۰ هزار تومان</h2>
+                            <p>لورم ایپسوم متن ساختگی</p>
+                            <a href="#" class="btn  add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبد</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="product-image-wrapper">
+                    <div class="single-products">
+                        <div class="productinfo ">
+                            <img src="images/gallery3.jpg" alt="" />
+                            <h2>۲۵۰ هزار تومان</h2>
+                            <p>لورم ایپسوم متن ساختگی</p>
+                            <a href="#" class="btn  add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبد</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="product-image-wrapper">
+                    <div class="single-products">
+                        <div class="productinfo ">
+                            <img src="images/gallery4.jpg" alt="" />
+                            <h2>۲۵۰ هزار تومان</h2>
+                            <p>لورم ایپسوم متن ساختگی</p>
+                            <a href="#" class="btn  add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبد</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div><!--/category-tab-->
+
+    </div>
+    <div class="clear"></div>
+
+</section>
+

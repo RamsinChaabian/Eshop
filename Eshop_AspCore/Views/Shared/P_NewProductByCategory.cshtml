@@ -1,0 +1,77 @@
+﻿@{
+    CategoryRepository categoryRepository = new CategoryRepository();
+    ProductRepository productRepository = new ProductRepository();
+
+}
+
+<div class="category-tab">
+    <!--category-tab-->
+    <ul>
+        @foreach (var item in categoryRepository.ShowCategories())
+        {
+            string active = "";
+            if (item.CatId == categoryRepository.ShowCategories().FirstOrDefault().CatId)
+            {
+                active = "active in";
+
+            }
+            <li><a href="#@item.CatId" class="@active" data-toggle="tab">@item.CatTitle</a></li>
+
+        }
+
+    </ul>
+
+    <div class="tab-content">
+        @foreach (var myItem in categoryRepository.ShowCategories())
+        {
+            string active = "";
+            if (myItem.CatId == categoryRepository.ShowCategories().FirstOrDefault().CatId)
+            {
+
+                active = "active in";
+
+            }
+            <div class="tab-pane fade @active" id="@myItem.CatId">
+
+                @foreach (var item2 in productRepository.ShowNewProductsByCategory().Where(c => c.CategoryId_FK == myItem.CatId).Take(4))
+                {
+                    <div class="col-sm-3 pull-right @active">
+                        <div class="product-image-wrapper">
+                            <div class="single-products">
+                                <div class="productinfo ">
+                                    <img src="@item2.DefaultPic" alt="@item2.ProductNameEN" style="padding-top:10px" />
+
+
+                                    @if (item2.OffProduct > 0 && item2.OffProduct <= 100)
+                                    {
+                                        decimal p1 = Math.Ceiling(item2.Price * item2.OffProduct / 100);
+                                        decimal p2 = item2.Price - p1;
+                                        decimal FinalPrice = (Math.Ceiling(p2 / 100) * 100);
+                                        <strike><h4>@item2.Price تومان </h4></strike>
+                                        <h2>@FinalPrice  تومان</h2>
+                                        <label class="badge alert-danger iranSansFont">@item2.OffProduct % تخفیف</label>
+                                    }
+                                    else
+                                    {
+                                        <h4>&nbsp;</h4>
+                                        <h2>@item2.Price  تومان</h2>
+
+                                    }
+                                    <label>&nbsp;</label>
+
+                                    <p>@item2.ProductNameFA</p>
+                                    <a href="#" class="btn btn-xs  add-to-cart"><i class="fa fa-shopping-cart"></i>افزودن به سبد</a>
+                                    <a href="/Home/DetailsProduct?productId=@item2.ProductId" class="btn btn-xs add-to-cart"><i class="glyphicon glyphicon-info-sign"></i>توضیحات</a>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+</div><!--/category-tab-->

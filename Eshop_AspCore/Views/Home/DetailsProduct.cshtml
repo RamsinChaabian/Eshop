@@ -1,0 +1,420 @@
+﻿@model VmDetailsProduct
+@{
+    ProductRepository productRepository = new ProductRepository();
+}
+
+@{
+    ViewData["Title"] = "DetailsProduct";
+    Layout = "~/Views/Shared/_Main_Layout.cshtml";
+}
+
+<link href="~/css/MyStyle.css" rel="stylesheet" />
+<link href="~/css/main.css" rel="stylesheet" />
+<link href="~/engine/css/visuallightbox.css" rel="stylesheet" />
+<link href="~/engine/css/vlightbox1.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.css">
+
+<script src="~/js/jquery.elevatezoom.js"></script>
+<script src="~/engine/js/visuallightbox.js"></script>
+<script src="~/engine/js/vlbdata1.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.0/jquery-confirm.min.js"></script>
+
+<style>
+    .product-information h4 {
+        color: #FE980F;
+        font-family: IRANSans;
+        font-size: 22px;
+        font-weight: 700;
+    }
+</style>
+<section>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-12  padding-right">
+                <div class="product-details">
+                    <!--product-details-->
+                    <div class="col-sm-5 pull-right">
+                        <div class="view-product">
+                            @foreach (var myItem in Model.ListImagesProduct)
+                            {
+                                <a href="">
+                                    <img class="zoom2" src="~/Files/Images/Products/@myItem.PictureName" alt="" title="@myItem.TitlePicture" />
+                                </a>
+                            }
+
+                        </div>
+                        <div id="similar-product" class="carousel slide" data-ride="carousel">
+
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner">
+                                <div class="item active">
+                                    @foreach (var item in Model.ListImagesProduct.Take(3))
+                                    {
+                                        <a class="vlightbox1" title="@item.PictureName" href="~/Files/Images/Products/Gallery/@item.PictureName">
+                                            <img src="~/Files/Images/Products/Gallery/@item.PictureName" style="width:85px;height:84px" title="@item.TitlePicture" alt="">
+                                        </a>
+                                    }
+
+                                </div>
+
+                                <div class="item">
+                                    @foreach (var item2 in Model.ListImagesProduct.Skip(3).Take(3))
+                                    {
+                                        <a class="vlightbox1" title="@item2.PictureName" href="~/Files/Images/Products/Gallery/@item2.PictureName">
+                                            <img src="~/Files/Images/Products/Gallery/@item2.PictureName" style="width:85px;height:84px" title="@item2.TitlePicture" alt="@item2.TitlePicture">
+
+                                        </a>
+                                    }
+
+                                </div>
+
+                            </div>
+
+                            <!-- Controls -->
+                            <a class="left item-control" href="#similar-product" data-slide="prev">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a class="right item-control" href="#similar-product" data-slide="next">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-7 pull-left">
+                        <div class="product-information" style="padding-right:20px">
+                            <!--/product-information-->
+
+                            <h2 style="font-family:iranSans">@Model.ProductNameFA</h2>
+                            <p style="font-family:iranSans">دسته بندی : <a style="color:red;font-weight:bold" href="/Home/Search?FirstCatId=@Model.LinkProduct">@Model.CategoryName</a>&nbsp;&nbsp; |&nbsp; @Model.SecondCatName &nbsp; |&nbsp; @Model.LastCatName</p>
+                            <p style="font-family:iranSans">کد محصول : @Model.ProductCode </p>
+
+                            <span>
+
+
+                                @if (Model.OffProduct > 0 && Model.OffProduct <= 100)
+                                {
+                                    decimal p1 = Math.Ceiling(Model.Price * Model.OffProduct / 100);
+                                    decimal p2 = Model.Price - p1;
+                                    decimal FinalPrice = (Math.Ceiling(p2 / 100) * 100);
+                                    <strike><h4>@Model.Price تومان</h4></strike>
+                                    <span style="font-family:iranSans">@FinalPrice تومان </span>
+                                }
+                                else
+                                {
+                                    <span style="font-family:iranSans">@Model.Price تومان </span>
+                                }
+                            </span>
+                            @if (productRepository.CheckExistCountProduct(Model.ProductId) > 0)
+                            {
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                    string currentUser = User.Identity.Name;
+                                    ApplicationDbContext db = new ApplicationDbContext();
+
+                                    var qUser = db.Users.Where(c => c.UserName == currentUser).FirstOrDefault();
+
+                                    <p><b>وضعیت موجودی کالا : </b>موجود</p>
+                                    <br />
+
+
+
+                                    <form method="post" asp-controller="Pay" asp-action="AddToCart">
+
+                                        <input type="hidden" name="productId" value="@Model.ProductId" />
+
+                                        <input type="hidden" name="userId" value="@qUser.Id" />
+
+                                        <label style="font-family:iranSans">تعداد : </label>
+
+                                        <input class="form-control text-center" style="width:12%" type="text" name="CountProduct" value="1" />
+
+                                        <br />
+                                        <input type="submit" value="افزودن به سبد خرید" class="btn btn-fefault cart" />
+                                    </form>
+
+                                }
+                                else
+                                {
+                                    <h3 style="color:red">برای خرید کالا لطفا وارد شوید</h3>
+                                }
+
+                            }
+                            else
+                            {
+                                <h3 style="color:red">کالا در حال حاضر وجود ندارد</h3>
+                            }
+
+                        </div><!--/product-information-->
+                    </div>
+                </div><!--/product-details-->
+
+                <h2 class="title text-center" style="font-family:'iranSans'">توضیحات کوتاهی درباره محصول</h2>
+                <p style="font-family:'iranSans';color:#9b9090">@Model.Description</p>
+
+                <div class="recommended_items">
+                    <!--recommended_items-->
+                    <h2 class="title text-center" style="font-family:'iranSans'">محصولات مرتبط</h2>
+
+                    <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                @foreach (var item in productRepository.ShowRelatedProduct(Model.ProductId, Model.ProductNameFA, Model.LastSubCat_FK).Where(c => c.ProductId != Model.ProductId).Take(3))
+                                {
+                                    <div class="col-sm-4">
+                                        <div class="product-image-wrapper">
+                                            <div class="single-products">
+                                                <div class="productinfo text-center">
+                                                    <img src="@item.DefaultPic" alt="" />
+                                                    <p>@item.ProductNameFA</p>
+                                                    <a class="btn btn-default" role="button" href="/Home/DetailsProduct?productId=@item.ProductId">توضیحات</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="item">
+
+                                @foreach (var item in productRepository.ShowRelatedProduct(Model.ProductId, Model.ProductNameFA, Model.LastSubCat_FK).Where(c => c.ProductId != Model.ProductId).Skip(3).Take(3))
+                                {
+                                    <div class="col-sm-4">
+                                        <div class="product-image-wrapper">
+                                            <div class="single-products">
+                                                <div class="productinfo text-center">
+                                                    <img src="@item.DefaultPic" alt="" />
+                                                    <p>@item.ProductNameFA</p>
+                                                    <a class="btn btn-default" role="button" href="/Home/DetailsProduct?productId=@item.ProductId">توضیحات</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                        <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </div>
+                </div><!--/recommended_items-->
+
+
+                <div class="category-tab">
+                    <!--category-tab-->
+                    <ul>
+                        <li><a href="#details" data-toggle="tab" class="active">مشخصات محصول</a></li>
+                        <li><a href="#comment" data-toggle="tab" class="">نظرات کاربران</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade " id="details">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <div class="panel-title">مشخصات کلی محصول</div>
+                                </div>
+                                <div class="panel-body">
+                                    <p>نام محصول :@Model.ProductNameFA </p>
+                                    <p>نام لاتین محصول : @Model.ProductNameEN</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane fade active in" id="comment">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <div class="panel-title">نظرات کاربران</div>
+                                </div>
+                                <div class="panel-body">
+                                    <h2 class="title text-center" style="font-family:'iranSans'">ثبت دیدگاه ارزشمند شما</h2>
+                                    <hr />
+                                    @if (User.Identity.IsAuthenticated == false)
+                                    {
+                                        <div class="alert alert-danger text-center">برای ثبت نظر ابتدا باید<a href="/Account/Login" style="font-weight:bold">&nbsp;وارد پنل کاربری &nbsp;</a>بشوید</div>
+                                    }
+                                    else
+                                    {
+                                        <div id="msgForm" class="@TempData["Style"]">
+                                            @TempData["Message"]
+                                        </div>
+                                        <form asp-action="AddComment" asp-controller="Home" method="post" onsubmit="return validateForm()">
+                                            <input type="hidden" name="productId_FK" value="@Model.ProductId" />
+
+                                            <input type="hidden" name="userName" value="@User.Identity.Name" />
+                                            <div class="container">
+                                                <div class="col-md-12 col-sm-12">
+                                                    <div class="form-group">
+
+                                                        <div class="col-md-4 col-sm-4 pull-right">
+                                                            <label for="InputTitle">عنوان دیدگاه : </label>
+                                                            <input type="text" name="txtTitle" id="InputTitle" class="form-control" />
+                                                            <p></p>
+                                                        </div>
+
+                                                        <div class="col-md-10 col-sm-10 pull-right">
+                                                            <label for="InputNote">متن دیدگاه : </label>
+                                                            <textarea name="txtNote" id="InputNote" class="form-control"></textarea>
+                                                            <br />
+                                                            <input type="submit" name="btnSubmit" value="ثبت نظر" class="btn btn-warning" />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    }
+                                    <br />
+                                    @if (Model.ListCommentsProduct.Count > 0)
+                                    {
+                                        <input type="button" onclick="ShowComments()" value="نمایش نظرات" class="btn btn-default text-center col-md-12" id="btn-showcomments" />
+
+                                        <div id="divComments" style="display:none">
+
+                                            <h2 class="title text-center" style="font-family:'iranSans'">نظرات کاربران</h2>
+                                            <hr />
+                                            @foreach (var item in Model.ListCommentsProduct)
+                                            {
+                                                <div class="container">
+                                                    <div class="form-group">
+                                                        <label>@item.FulllName میگه : </label>
+                                                        <div class="alert alert-info">@item.Text</div>
+                                                        <hr />
+                                                    </div>
+                                                </div>
+                                            }
+
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="alert alert-warning text-center">هیچ دیدگاهی وجود ندارد</div>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div><!--/category-tab-->
+
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        //----------ShowComments-------//
+        function ShowComments() {
+            // document.getElementById("divComments").style.display = "unset";
+            document.getElementById("btn-showcomments").style.display = "none";
+            //$("#btn-showcomments").fadeOut(1000);
+            $("#divComments").fadeIn(500);
+        }
+        //--------------------------------
+        //---------Validate Form --------//
+        function validateForm() {
+            var Title = $('#InputTitle').val();
+            var Note = $('#InputNote').val();
+
+            if (Title == "") {
+
+                $('#InputTitle').focus();
+
+                $.alert({
+                    title: 'خطا',
+                    content: 'لطفا عنوان دیدگاه را وارد نمایید',
+                    rtl: true,
+                    closeIcon: true,
+                    type: 'red',
+                    typeAnimated: true,
+                    buttons: {
+                        confirm: {
+                            text: 'تایید',
+                            btnClass: 'btn-red',
+                        }
+                    },
+                });
+
+                return false;
+            }
+
+            if (Note == "") {
+
+                $('#InputNote').focus();
+
+                $.alert({
+                    title: 'خطا',
+                    content: 'لطفا متن دیدگاه را وارد نمایید',
+                    rtl: true,
+                    closeIcon: true,
+                    type: 'red',
+                    typeAnimated: true,
+                    buttons: {
+                        confirm: {
+                            text: 'تایید',
+                            btnClass: 'btn-red',
+                        }
+                    },
+                });
+
+                return false;
+            }
+
+
+            return true;
+        }
+        //------------------------------//
+
+        $(".zoom1").elevateZoom({
+            zoomWindowFadeIn: 500,
+            zoomWindowFadeOut: 500,
+            lensFadeIn: 500,
+            lensFadeOut: 500,
+            scrollZoom: true
+        });
+
+        $(".zoom2").elevateZoom({
+            zoomType: "inner",
+            cursor: "crosshair",
+            zoomWindowFadeIn: 500,
+            zoomWindowFadeOut: 500,
+            lensFadeIn: 500,
+            lensFadeOut: 500,
+            scrollZoom: true
+        });
+
+        $(".zoom3").elevateZoom({
+            zoomType: "lens",
+            lensShape: "round",
+            lensSize: 200,
+            zoomWindowFadeIn: 500,
+            zoomWindowFadeOut: 500,
+            lensFadeIn: 500,
+            lensFadeOut: 500,
+            scrollZoom: true
+        });
+
+
+    </script>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
